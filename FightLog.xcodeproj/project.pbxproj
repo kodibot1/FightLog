@@ -1,0 +1,649 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* FightLogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* FightLogApp.swift */; };
+		A10000000000000000000002 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* Session.swift */; };
+		A10000000000000000000003 /* Technique.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* Technique.swift */; };
+		A10000000000000000000004 /* ProgressNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* ProgressNote.swift */; };
+		A10000000000000000000005 /* DefaultTechniques.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* DefaultTechniques.swift */; };
+		A10000000000000000000006 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* SessionViewModel.swift */; };
+		A10000000000000000000007 /* TechniqueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* TechniqueViewModel.swift */; };
+		A10000000000000000000008 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* NoteViewModel.swift */; };
+		A10000000000000000000009 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* MainTabView.swift */; };
+		A10000000000000000000010 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* DashboardView.swift */; };
+		A10000000000000000000011 /* QuickLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* QuickLogSheet.swift */; };
+		A10000000000000000000012 /* QuickNoteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* QuickNoteSheet.swift */; };
+		A10000000000000000000013 /* SessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* SessionListView.swift */; };
+		A10000000000000000000014 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* SessionDetailView.swift */; };
+		A10000000000000000000015 /* TechniqueListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* TechniqueListView.swift */; };
+		A10000000000000000000016 /* TechniqueChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* TechniqueChip.swift */; };
+		A10000000000000000000017 /* TechniquePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* TechniquePickerView.swift */; };
+		A10000000000000000000018 /* NoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* NoteListView.swift */; };
+		A10000000000000000000019 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* Assets.xcassets */; };
+		A10000000000000000000020 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000020 /* Location.swift */; };
+		A10000000000000000000021 /* Combo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000021 /* Combo.swift */; };
+		A10000000000000000000022 /* Lesson.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000022 /* Lesson.swift */; };
+		A10000000000000000000023 /* DefaultCombos.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000023 /* DefaultCombos.swift */; };
+		A10000000000000000000024 /* ComboPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000024 /* ComboPickerView.swift */; };
+		A10000000000000000000025 /* LessonListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000025 /* LessonListView.swift */; };
+		A10000000000000000000026 /* LessonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000026 /* LessonDetailView.swift */; };
+		A10000000000000000000027 /* CreateLessonSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000027 /* CreateLessonSheet.swift */; };
+		A10000000000000000000028 /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000028 /* Goal.swift */; };
+		A10000000000000000000029 /* SparringPartner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000029 /* SparringPartner.swift */; };
+		A10000000000000000000030 /* VideoNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000030 /* VideoNote.swift */; };
+		A10000000000000000000031 /* TrainingSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000031 /* TrainingSchedule.swift */; };
+		A10000000000000000000032 /* TechniqueDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000032 /* TechniqueDetailView.swift */; };
+		A10000000000000000000033 /* RoundTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000033 /* RoundTimerView.swift */; };
+		A10000000000000000000034 /* CalendarHeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000034 /* CalendarHeatmapView.swift */; };
+		A10000000000000000000035 /* GoalsStreaksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000035 /* GoalsStreaksView.swift */; };
+		A10000000000000000000036 /* SparringPartnersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000036 /* SparringPartnersView.swift */; };
+		A10000000000000000000037 /* TrainingScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000037 /* TrainingScheduleView.swift */; };
+		A10000000000000000000038 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000038 /* NotificationManager.swift */; };
+		A10000000000000000000039 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000039 /* Person.swift */; };
+		A10000000000000000000040 /* MemoryQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000040 /* MemoryQuestions.swift */; };
+		A10000000000000000000041 /* PeopleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000041 /* PeopleListView.swift */; };
+		A10000000000000000000042 /* AddPersonSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000042 /* AddPersonSheet.swift */; };
+		A10000000000000000000043 /* MemoryQAFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000043 /* MemoryQAFlowView.swift */; };
+		A10000000000000000000044 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000044 /* PersonDetailView.swift */; };
+		A10000000000000000000045 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* UserProfile.swift */; };
+		A10000000000000000000046 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000046 /* OnboardingView.swift */; };
+		A10000000000000000000047 /* AddExerciseSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000047 /* AddExerciseSheet.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* FightLogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightLogApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* Technique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Technique.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* ProgressNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressNote.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* DefaultTechniques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTechniques.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* SessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* TechniqueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechniqueViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* QuickLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLogSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* QuickNoteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickNoteSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* SessionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000014 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* TechniqueListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechniqueListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* TechniqueChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechniqueChip.swift; sourceTree = "<group>"; };
+		A20000000000000000000017 /* TechniquePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechniquePickerView.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* NoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000020 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		A20000000000000000000021 /* Combo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combo.swift; sourceTree = "<group>"; };
+		A20000000000000000000022 /* Lesson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson.swift; sourceTree = "<group>"; };
+		A20000000000000000000023 /* DefaultCombos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCombos.swift; sourceTree = "<group>"; };
+		A20000000000000000000024 /* ComboPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboPickerView.swift; sourceTree = "<group>"; };
+		A20000000000000000000025 /* LessonListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000026 /* LessonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000027 /* CreateLessonSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLessonSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000028 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
+		A20000000000000000000029 /* SparringPartner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparringPartner.swift; sourceTree = "<group>"; };
+		A20000000000000000000030 /* VideoNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoNote.swift; sourceTree = "<group>"; };
+		A20000000000000000000031 /* TrainingSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingSchedule.swift; sourceTree = "<group>"; };
+		A20000000000000000000032 /* TechniqueDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechniqueDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000033 /* RoundTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundTimerView.swift; sourceTree = "<group>"; };
+		A20000000000000000000034 /* CalendarHeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeatmapView.swift; sourceTree = "<group>"; };
+		A20000000000000000000035 /* GoalsStreaksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsStreaksView.swift; sourceTree = "<group>"; };
+		A20000000000000000000036 /* SparringPartnersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparringPartnersView.swift; sourceTree = "<group>"; };
+		A20000000000000000000037 /* TrainingScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingScheduleView.swift; sourceTree = "<group>"; };
+		A20000000000000000000038 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		A20000000000000000000039 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		A20000000000000000000040 /* MemoryQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryQuestions.swift; sourceTree = "<group>"; };
+		A20000000000000000000041 /* PeopleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleListView.swift; sourceTree = "<group>"; };
+		A20000000000000000000042 /* AddPersonSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000043 /* MemoryQAFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryQAFlowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000044 /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000045 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A20000000000000000000046 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A20000000000000000000047 /* AddExerciseSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseSheet.swift; sourceTree = "<group>"; };
+		A30000000000000000000001 /* FightLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FightLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A50000000000000000000002 /* FightLog */,
+				A50000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50000000000000000000002 /* FightLog */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* FightLogApp.swift */,
+				A50000000000000000000004 /* Models */,
+				A50000000000000000000005 /* ViewModels */,
+				A50000000000000000000006 /* Views */,
+				A50000000000000000000011 /* Data */,
+				A50000000000000000000014 /* Services */,
+				A20000000000000000000019 /* Assets.xcassets */,
+			);
+			path = FightLog;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30000000000000000000001 /* FightLog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000002 /* Session.swift */,
+				A20000000000000000000003 /* Technique.swift */,
+				A20000000000000000000004 /* ProgressNote.swift */,
+				A20000000000000000000020 /* Location.swift */,
+				A20000000000000000000021 /* Combo.swift */,
+				A20000000000000000000022 /* Lesson.swift */,
+				A20000000000000000000028 /* Goal.swift */,
+				A20000000000000000000029 /* SparringPartner.swift */,
+				A20000000000000000000030 /* VideoNote.swift */,
+				A20000000000000000000031 /* TrainingSchedule.swift */,
+				A20000000000000000000039 /* Person.swift */,
+				A20000000000000000000045 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000006 /* SessionViewModel.swift */,
+				A20000000000000000000007 /* TechniqueViewModel.swift */,
+				A20000000000000000000008 /* NoteViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000009 /* MainTabView.swift */,
+				A50000000000000000000007 /* Dashboard */,
+				A50000000000000000000008 /* Sessions */,
+				A50000000000000000000009 /* Techniques */,
+				A50000000000000000000012 /* Combos */,
+				A50000000000000000000013 /* Lessons */,
+				A50000000000000000000010 /* Notes */,
+				A50000000000000000000015 /* Timer */,
+				A50000000000000000000016 /* Stats */,
+				A50000000000000000000017 /* Sparring */,
+				A50000000000000000000018 /* Schedule */,
+				A50000000000000000000019 /* People */,
+				A50000000000000000000020 /* Onboarding */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000007 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000010 /* DashboardView.swift */,
+				A20000000000000000000011 /* QuickLogSheet.swift */,
+				A20000000000000000000012 /* QuickNoteSheet.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000008 /* Sessions */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000013 /* SessionListView.swift */,
+				A20000000000000000000014 /* SessionDetailView.swift */,
+			);
+			path = Sessions;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000009 /* Techniques */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000015 /* TechniqueListView.swift */,
+				A20000000000000000000016 /* TechniqueChip.swift */,
+				A20000000000000000000017 /* TechniquePickerView.swift */,
+				A20000000000000000000032 /* TechniqueDetailView.swift */,
+			);
+			path = Techniques;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000010 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000018 /* NoteListView.swift */,
+			);
+			path = Notes;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000011 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000005 /* DefaultTechniques.swift */,
+				A20000000000000000000023 /* DefaultCombos.swift */,
+				A20000000000000000000040 /* MemoryQuestions.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000012 /* Combos */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000024 /* ComboPickerView.swift */,
+			);
+			path = Combos;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000013 /* Lessons */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000025 /* LessonListView.swift */,
+				A20000000000000000000026 /* LessonDetailView.swift */,
+				A20000000000000000000027 /* CreateLessonSheet.swift */,
+				A20000000000000000000047 /* AddExerciseSheet.swift */,
+			);
+			path = Lessons;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000014 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000038 /* NotificationManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000015 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000033 /* RoundTimerView.swift */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000016 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000034 /* CalendarHeatmapView.swift */,
+				A20000000000000000000035 /* GoalsStreaksView.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000017 /* Sparring */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000036 /* SparringPartnersView.swift */,
+			);
+			path = Sparring;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000018 /* Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000037 /* TrainingScheduleView.swift */,
+			);
+			path = Schedule;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000019 /* People */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000041 /* PeopleListView.swift */,
+				A20000000000000000000042 /* AddPersonSheet.swift */,
+				A20000000000000000000043 /* MemoryQAFlowView.swift */,
+				A20000000000000000000044 /* PersonDetailView.swift */,
+			);
+			path = People;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000020 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000046 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60000000000000000000001 /* FightLog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXNativeTarget "FightLog" */;
+			buildPhases = (
+				A70000000000000000000001 /* Sources */,
+				A40000000000000000000001 /* Frameworks */,
+				A70000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FightLog;
+			productName = FightLog;
+			productReference = A30000000000000000000001 /* FightLog.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A90000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					A60000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A80000000000000000000002 /* Build configuration list for PBXProject "FightLog" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A50000000000000000000001;
+			productRefGroup = A50000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60000000000000000000001 /* FightLog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A70000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000019 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* FightLogApp.swift in Sources */,
+				A10000000000000000000002 /* Session.swift in Sources */,
+				A10000000000000000000003 /* Technique.swift in Sources */,
+				A10000000000000000000004 /* ProgressNote.swift in Sources */,
+				A10000000000000000000020 /* Location.swift in Sources */,
+				A10000000000000000000021 /* Combo.swift in Sources */,
+				A10000000000000000000022 /* Lesson.swift in Sources */,
+				A10000000000000000000028 /* Goal.swift in Sources */,
+				A10000000000000000000029 /* SparringPartner.swift in Sources */,
+				A10000000000000000000030 /* VideoNote.swift in Sources */,
+				A10000000000000000000031 /* TrainingSchedule.swift in Sources */,
+				A10000000000000000000005 /* DefaultTechniques.swift in Sources */,
+				A10000000000000000000023 /* DefaultCombos.swift in Sources */,
+				A10000000000000000000006 /* SessionViewModel.swift in Sources */,
+				A10000000000000000000007 /* TechniqueViewModel.swift in Sources */,
+				A10000000000000000000008 /* NoteViewModel.swift in Sources */,
+				A10000000000000000000038 /* NotificationManager.swift in Sources */,
+				A10000000000000000000009 /* MainTabView.swift in Sources */,
+				A10000000000000000000010 /* DashboardView.swift in Sources */,
+				A10000000000000000000011 /* QuickLogSheet.swift in Sources */,
+				A10000000000000000000012 /* QuickNoteSheet.swift in Sources */,
+				A10000000000000000000013 /* SessionListView.swift in Sources */,
+				A10000000000000000000014 /* SessionDetailView.swift in Sources */,
+				A10000000000000000000015 /* TechniqueListView.swift in Sources */,
+				A10000000000000000000016 /* TechniqueChip.swift in Sources */,
+				A10000000000000000000017 /* TechniquePickerView.swift in Sources */,
+				A10000000000000000000032 /* TechniqueDetailView.swift in Sources */,
+				A10000000000000000000024 /* ComboPickerView.swift in Sources */,
+				A10000000000000000000025 /* LessonListView.swift in Sources */,
+				A10000000000000000000026 /* LessonDetailView.swift in Sources */,
+				A10000000000000000000027 /* CreateLessonSheet.swift in Sources */,
+				A10000000000000000000018 /* NoteListView.swift in Sources */,
+				A10000000000000000000033 /* RoundTimerView.swift in Sources */,
+				A10000000000000000000034 /* CalendarHeatmapView.swift in Sources */,
+				A10000000000000000000035 /* GoalsStreaksView.swift in Sources */,
+				A10000000000000000000036 /* SparringPartnersView.swift in Sources */,
+				A10000000000000000000037 /* TrainingScheduleView.swift in Sources */,
+				A10000000000000000000039 /* Person.swift in Sources */,
+				A10000000000000000000040 /* MemoryQuestions.swift in Sources */,
+				A10000000000000000000041 /* PeopleListView.swift in Sources */,
+				A10000000000000000000042 /* AddPersonSheet.swift in Sources */,
+				A10000000000000000000043 /* MemoryQAFlowView.swift in Sources */,
+				A10000000000000000000044 /* PersonDetailView.swift in Sources */,
+				A10000000000000000000045 /* UserProfile.swift in Sources */,
+				A10000000000000000000046 /* OnboardingView.swift in Sources */,
+				A10000000000000000000047 /* AddExerciseSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B10000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6M2SPTN4WU;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B10000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6M2SPTN4WU;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B10000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fightlog.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B10000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fightlog.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80000000000000000000001 /* Build configuration list for PBXNativeTarget "FightLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10000000000000000000003 /* Debug */,
+				B10000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000000000002 /* Build configuration list for PBXProject "FightLog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10000000000000000000001 /* Debug */,
+				B10000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A90000000000000000000001 /* Project object */;
+}
