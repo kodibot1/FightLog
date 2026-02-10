@@ -440,7 +440,7 @@ function saveProfile(p) { save('fl_profile', p); }
 const OB_DEFAULTS = {
   name:'', disciplines:[], experience:'', goal:'',
   typicalType:'Class', typicalDuration:60, typicalIntensity:'Moderate', typicalSpar:false,
-  trainingFormat:'', typicalDrillCount:3, onboardingComplete:false
+  trainingFormat:[], typicalDrillCount:3, onboardingComplete:false
 };
 
 let ob = {...OB_DEFAULTS};
@@ -471,7 +471,7 @@ function obValid() {
   if(obStep===1) return !!ob.experience;
   if(obStep===2) return !!ob.goal;
   if(obStep===3) return true; // all have defaults
-  if(obStep===4) return !!ob.trainingFormat;
+  if(obStep===4) return ob.trainingFormat.length>0;
   if(obStep===5) return true; // API key optional
   return true;
 }
@@ -579,14 +579,22 @@ function obScreen4() {
 // Screen 5: Training Format
 function obScreen5() {
   return `<div class="ob-header"><span class="ob-emoji">🔄</span>
-    <h2>How do drills work?</h2><p>Helps AI understand your session structure</p></div>
-    <div class="ob-cards single-col">${FORMATS.map(f=>
-      `<div class="ob-card ${ob.trainingFormat===f.id?'selected':''}" onclick="ob.trainingFormat='${f.id}';renderOnboarding()">
+    <h2>How do drills work?</h2><p>Select all that apply</p></div>
+    <div class="ob-cards single-col">${FORMATS.map(f=>{
+      const sel = ob.trainingFormat.includes(f.id);
+      return `<div class="ob-card ${sel?'selected':''}" onclick="toggleOBFormat('${f.id}')">
         <span class="ob-card-emoji">${f.emoji}</span><div class="ob-card-title">${f.title}</div>
-        <div class="ob-card-sub">${f.sub}</div></div>`).join('')}</div>
+        <div class="ob-card-sub">${f.sub}</div></div>`;}).join('')}</div>
     <div class="section" style="margin-top:16px"><div class="section-title">Typical drills per session</div>
       <div class="ob-drill-count">${[2,3,4,5].map(n=>
         `<button class="ob-drill-btn ${ob.typicalDrillCount===n?'selected':''}" onclick="ob.typicalDrillCount=${n};renderOnboarding()">${n}${n===5?'+':''}</button>`).join('')}</div></div>`;
+}
+
+function toggleOBFormat(id) {
+  const i=ob.trainingFormat.indexOf(id);
+  if(i>=0) ob.trainingFormat.splice(i,1);
+  else ob.trainingFormat.push(id);
+  renderOnboarding();
 }
 
 // Screen 6: API Key
@@ -639,7 +647,8 @@ function buildProfileContext() {
   ctx += '\n- Experience: ' + p.experience;
   ctx += '\n- Goal: ' + p.goal;
   ctx += '\n- Typical session: ' + p.typicalDuration + ' min ' + p.typicalType + ' at ' + (p.typicalIntensity||'moderate') + ' intensity';
-  ctx += '\n- Training format: ' + (formatMap[p.trainingFormat]||'Mixed');
+  const fmts = Array.isArray(p.trainingFormat) ? p.trainingFormat : (p.trainingFormat ? [p.trainingFormat] : ['mixed']);
+  ctx += '\n- Training format: ' + fmts.map(f=>formatMap[f]||f).join(', ');
   ctx += '\n- Usually does ~' + p.typicalDrillCount + ' drills per session';
   ctx += p.typicalSpar ? '\n- Usually spars' : '\n- Does not usually spar';
   return ctx;
