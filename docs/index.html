@@ -157,6 +157,15 @@ select { appearance:none; }
 .hero-stat .hero-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--text2); margin-top:6px; }
 .hero-stat .hero-secondary { font-size:15px; color:var(--text2); margin-top:8px; }
 
+.welcome-card { background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px; margin-bottom:20px; }
+.welcome-card h3 { font-size:16px; font-weight:700; margin-bottom:12px; }
+.welcome-card .wc-method { display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; }
+.welcome-card .wc-icon { font-size:24px; flex-shrink:0; margin-top:2px; }
+.welcome-card .wc-title { font-size:14px; font-weight:600; margin-bottom:2px; }
+.welcome-card .wc-desc { font-size:13px; color:var(--text2); line-height:1.4; }
+.welcome-card .wc-dismiss { font-size:13px; color:var(--text3); margin-top:4px; }
+
 /* ── Quick Log ── */
 .type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .type-btn { height:64px; border-radius:12px; display:flex; flex-direction:column;
@@ -796,6 +805,7 @@ function renderDashboard() {
   document.getElementById('page-dashboard').innerHTML = `
     <div class="page-header">
       <div class="row"><h1>${greeting}</h1><div class="spacer"></div>
+        <button class="btn btn-ghost btn-sm" onclick="showHowItWorks()">&#8505;</button>
         <button class="btn btn-ghost btn-sm" onclick="editProfile()">&#9881;</button></div>
       <div class="subtitle">The Striking Arts Journal</div>
     </div>
@@ -805,6 +815,21 @@ function renderDashboard() {
         <div class="hero-label">Sessions This Week</div>
         ${secondaryLine?`<div class="hero-secondary">${secondaryLine}</div>`:''}
       </div>
+
+      ${!localStorage.getItem('fl_welcome_dismissed') ? `<div class="welcome-card">
+        <h3>Two ways to log</h3>
+        <div class="wc-method">
+          <div class="wc-icon">&#9999;&#65039;</div>
+          <div><div class="wc-title">Quick Log</div>
+          <div class="wc-desc">Tap to pick session type, duration, techniques. Fast, no AI needed.</div></div>
+        </div>
+        <div class="wc-method">
+          <div class="wc-icon">&#127908;</div>
+          <div><div class="wc-title">Voice Log</div>
+          <div class="wc-desc">Talk through your session. AI asks follow-up questions and builds a structured breakdown.</div></div>
+        </div>
+        <button class="btn btn-ghost btn-sm wc-dismiss" onclick="dismissWelcome()">Got it</button>
+      </div>` : ''}
 
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
         <button class="btn btn-primary btn-full" onclick="openQuickLog()">Log Training</button>
@@ -1870,6 +1895,31 @@ async function callClaude(apiKey, payload) {
   });
   if (!resp.ok) throw new Error('API error (' + resp.status + ')');
   return await resp.json();
+}
+
+function dismissWelcome() {
+  localStorage.setItem('fl_welcome_dismissed', '1');
+  renderDashboard();
+}
+
+function showHowItWorks() {
+  document.getElementById('modalApiKeyInner').innerHTML = `
+    <h2>How It Works</h2>
+    <div style="margin-bottom:20px">
+      <div class="wc-method" style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px">
+        <div style="font-size:24px;flex-shrink:0;margin-top:2px">&#9999;&#65039;</div>
+        <div><div style="font-size:14px;font-weight:600;margin-bottom:2px">Quick Log</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.4">Tap to pick session type, duration, techniques. Fast, no AI needed.</div></div>
+      </div>
+      <div class="wc-method" style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px">
+        <div style="font-size:24px;flex-shrink:0;margin-top:2px">&#127908;</div>
+        <div><div style="font-size:14px;font-weight:600;margin-bottom:2px">Voice Log</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.4">Talk through your session. AI asks follow-up questions and builds a structured breakdown.</div></div>
+      </div>
+      <p style="font-size:13px;color:var(--text3);margin-top:8px">Voice Log requires a <a href="#" onclick="event.preventDefault();closeModal('modalApiKey');showApiKeyModal()" style="color:var(--accent);text-decoration:none">Claude API key</a>.</p>
+    </div>
+    <button class="btn btn-secondary btn-full" onclick="closeModal('modalApiKey')">Close</button>`;
+  openModal('modalApiKey');
 }
 
 function showApiKeyModal() {
