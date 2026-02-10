@@ -1,7 +1,7 @@
 {
   "name": "FightLog",
   "short_name": "FightLog",
-  "description": "Boxing training journal",
+  "description": "The Striking Arts Training Journal",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#000000",

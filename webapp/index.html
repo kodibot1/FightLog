@@ -504,7 +504,7 @@ function renderOnboarding() {
 // Screen 0: Name
 function obScreen0() {
   return `<div class="ob-header"><span class="ob-emoji">🥊</span>
-    <h2>Welcome to FightLog</h2><p>Log your boxing sessions, track your combos</p></div>
+    <h2>Welcome to FightLog</h2><p>The Striking Arts Training Journal</p></div>
     <div class="section"><div class="section-title">What's your name?</div>
       <input type="text" id="obName" placeholder="Your name" value="${esc(ob.name)}"
         oninput="ob.name=this.value;document.querySelector('.ob-next').disabled=!obValid()"
