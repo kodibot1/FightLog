@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#000"/>
+  <!-- Glove body -->
+  <ellipse cx="268" cy="195" rx="125" ry="115" fill="#FF9500"/>
+  <!-- Thumb -->
+  <ellipse cx="138" cy="172" rx="42" ry="68" fill="#FF9500" transform="rotate(-8 138 172)"/>
+  <!-- Bridge to cuff -->
+  <rect x="170" y="290" width="196" height="30" rx="0" fill="#FF9500"/>
+  <!-- Wrist cuff -->
+  <rect x="162" y="316" width="212" height="72" rx="16" fill="#D47A00"/>
+  <!-- Center lacing line -->
+  <line x1="268" y1="105" x2="268" y2="290" stroke="#D47A00" stroke-width="7" stroke-linecap="round"/>
+  <!-- Lace crosses -->
+  <line x1="224" y1="155" x2="312" y2="155" stroke="#D47A00" stroke-width="5" stroke-linecap="round"/>
+  <line x1="220" y1="200" x2="316" y2="200" stroke="#D47A00" stroke-width="5" stroke-linecap="round"/>
+  <line x1="224" y1="245" x2="312" y2="245" stroke="#D47A00" stroke-width="5" stroke-linecap="round"/>
+</svg>
