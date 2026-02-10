@@ -378,6 +378,51 @@ select { appearance:none; }
 .drill-combos { display:flex; flex-wrap:wrap; gap:4px; }
 .drill-combo-tag { font-size:11px; font-family:monospace; padding:3px 8px; border-radius:8px;
   background:var(--surface3); color:var(--text2); }
+
+/* ── Changelog ── */
+.changelog-entry { margin-bottom:18px; }
+.changelog-ver { font-size:16px; font-weight:700; color:var(--accent); }
+.changelog-date { font-size:12px; color:var(--text3); margin-left:8px; }
+.changelog-list { margin:8px 0 0 8px; list-style:none; }
+.changelog-list li { font-size:14px; color:var(--text2); line-height:1.6; padding-left:14px; position:relative; }
+.changelog-list li::before { content:''; position:absolute; left:0; top:9px; width:5px; height:5px;
+  border-radius:50%; background:var(--accent); }
+
+/* ── Daily Quote ── */
+.daily-quote { text-align:center; padding:0 16px 16px; }
+.quote-text { font-style:italic; color:var(--text2); font-size:14px; line-height:1.5; }
+.quote-author { color:var(--text3); font-size:12px; margin-top:4px; }
+
+/* ── Streak Bar ── */
+.streak-bar { display:flex; justify-content:center; gap:12px; margin-bottom:16px; }
+.streak-day { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.streak-day-label { font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase; }
+.streak-dot { width:10px; height:10px; border-radius:50%; background:var(--surface3); }
+.streak-dot.trained { background:var(--accent); }
+.streak-dot.today { box-shadow:0 0 0 2px var(--accent); }
+
+/* ── Session Filter ── */
+.filter-chips { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; }
+.filter-chip { padding:6px 12px; border-radius:8px; font-size:13px; font-weight:600; border:1px solid var(--border);
+  cursor:pointer; white-space:nowrap; background:var(--surface); color:var(--text2); transition:all 0.15s ease; }
+.filter-chip.active { background:var(--accent-dim); color:var(--accent); border-color:var(--accent-border); }
+input[type=date] { color-scheme:dark; }
+
+/* ── Stats / Heatmap ── */
+.heatmap-grid { display:grid; gap:2px; margin-top:12px; }
+.heatmap-header { font-size:11px; font-weight:600; color:var(--text3); text-align:center; padding:6px 4px; }
+.heatmap-label { font-size:11px; color:var(--text2); padding:6px 8px 6px 0; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; font-family:monospace; }
+.heatmap-cell { border-radius:4px; min-height:28px; display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:var(--text3); }
+.heatmap-combo { font-size:12px; font-family:monospace; color:var(--text2); padding:6px 4px; }
+
+/* ── Intent Card ── */
+.intent-card { border-left:3px solid var(--accent); padding:12px 14px; background:var(--surface);
+  border-radius:0 12px 12px 0; margin-bottom:12px; }
+.intent-card .intent-label { font-size:11px; font-weight:600; color:var(--accent); text-transform:uppercase;
+  letter-spacing:0.06em; margin-bottom:4px; }
+.intent-card .intent-text { font-size:14px; color:var(--text); }
 </style>
 </head>
 <body>
@@ -390,11 +435,15 @@ select { appearance:none; }
   <button class="tab" onclick="switchTab('sessions')">
     <span class="tab-icon">&#128203;</span>Sessions
   </button>
+  <button class="tab" onclick="switchTab('stats')">
+    <span class="tab-icon">&#128200;</span>Stats
+  </button>
 </nav>
 
 <!-- Pages -->
 <div class="page active" id="page-dashboard"></div>
 <div class="page" id="page-sessions"></div>
+<div class="page" id="page-stats"></div>
 
 <!-- Modals -->
 <div class="modal-bg" id="modalQuickLog"><div class="modal" id="modalQuickLogInner"></div></div>
@@ -458,6 +507,55 @@ const DEFAULT_COMBOS = [
 
 const NUM_MAP = {'1':'Jab','2':'Cross','3':'Lead Hook','4':'Rear Hook','5':'Lead Uppercut',
   '6':'Rear Uppercut','7':'Lead Body Hook','8':'Rear Body Hook','1b':'Body Jab','2b':'Body Cross'};
+
+const CHANGELOG = [
+  {ver:'1.3.0',date:'Feb 2026',items:[
+    'Combo frequency heatmap in new Stats tab',
+    'Session date filter chips + date picker',
+    'Pre-session intent / focus field',
+    'Training partner notes',
+    'Share / export sessions',
+    'Daily boxing quote on dashboard',
+    'Weekly consistency dot grid + stat cards',
+    'Changelog viewer'
+  ]},
+  {ver:'1.2.0',date:'Jan 2026',items:[
+    'Welcome card with how-it-works guide',
+    'Dashboard redesign with premium polish',
+    'Two-tap session delete for safety',
+    'Tap feedback on all interactive elements'
+  ]},
+  {ver:'1.1.0',date:'Jan 2026',items:[
+    'Voice Log with AI guided recall',
+    'Workout breakdown with drill blocks',
+    'Live session detection during recall',
+    'Profile & onboarding flow'
+  ]},
+  {ver:'1.0.0',date:'Jan 2026',items:[
+    'Quick Log with tap-to-select UI',
+    'Session history and detail view',
+    'Technique & combo libraries',
+    'Round timer'
+  ]}
+];
+
+const BOXING_QUOTES = [
+  {text:'Everyone has a plan until they get punched in the mouth.',author:'Mike Tyson'},
+  {text:'Float like a butterfly, sting like a bee.',author:'Muhammad Ali'},
+  {text:'The hero and the coward both feel the same thing, but the hero uses his fear, projects it onto his opponent, while the coward runs.',author:'Cus D\'Amato'},
+  {text:'My style is impetuous. My defense is impregnable.',author:'Mike Tyson'},
+  {text:'It\'s not the size of the dog in the fight, it\'s the size of the fight in the dog.',author:'Mark Twain'},
+  {text:'You don\'t play boxing.',author:'Floyd Mayweather'},
+  {text:'Rhythm is everything in boxing. Every move you make starts with your heart.',author:'Sugar Ray Robinson'},
+  {text:'A champion is someone who gets up when he can\'t.',author:'Jack Dempsey'},
+  {text:'The fight is won or lost far away from witnesses — behind the lines, in the gym, and out there on the road.',author:'Muhammad Ali'},
+  {text:'Boxing is the ultimate challenge. There\'s nothing that can compare to testing yourself the way you do every time you step in the ring.',author:'Sugar Ray Leonard'},
+  {text:'To be a great champion you must believe you are the best. If you\'re not, pretend you are.',author:'Muhammad Ali'},
+  {text:'Discipline is doing what you hate to do, but doing it like you love it.',author:'Mike Tyson'},
+  {text:'The more you sweat in training, the less you bleed in combat.',author:'Richard Marcinko'},
+  {text:'I hated every minute of training, but I said, don\'t quit. Suffer now and live the rest of your life as a champion.',author:'Muhammad Ali'},
+  {text:'Boxing is like jazz. The better it is, the less people appreciate it.',author:'George Foreman'}
+];
 
 // ══════════════════════════════════════════════
 //  STORAGE
@@ -721,14 +819,15 @@ function buildProfileContext() {
 let currentTab = 'dashboard';
 let techSearch = '';
 let comboSearch = '';
+let sessionFilter = null; // null=all, 'today','yesterday','thisWeek','lastWeek', or 'YYYY-MM-DD'
 
 // Quick Log state
-let ql = { type:'Class', duration:60, intensity:null, techniques:new Set(), combos:new Set(), notes:'' };
+let ql = { type:'Class', duration:60, intensity:null, techniques:new Set(), combos:new Set(), notes:'', intent:'', partner:'' };
 
 // Voice Log state
 let vl = { phase:'quickContext', recording:false, error:null,
   // Quick context
-  selType:'Class', selDur:60, selInt:'Moderate', didSpar:false,
+  selType:'Class', selDur:60, selInt:'Moderate', didSpar:false, intent:'', partner:'',
   // Guided recall
   conversation:[], currentQuestion:'', currentAnswer:'', isLoadingQ:false,
   // Review
@@ -751,13 +850,14 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
-  document.querySelectorAll('.tab')[['dashboard','sessions'].indexOf(tab)].classList.add('active');
+  document.querySelectorAll('.tab')[['dashboard','sessions','stats'].indexOf(tab)].classList.add('active');
   renderPage(tab);
 }
 
 function renderPage(tab) {
   if (tab==='dashboard') renderDashboard();
   else if (tab==='sessions') renderSessions();
+  else if (tab==='stats') renderStats();
 }
 
 function showToast(msg) {
@@ -776,13 +876,51 @@ function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 //  DASHBOARD
 // ══════════════════════════════════════════════
 
+function getDailyQuote() {
+  const d = new Date();
+  const seed = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+  return BOXING_QUOTES[seed % BOXING_QUOTES.length];
+}
+
+function sessionsThisMonth(sessions) {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  return sessions.filter(s => new Date(s.timestamp) >= start);
+}
+
+function getWeekDaysTrained(sessions) {
+  const now = new Date();
+  const day = now.getDay(), diff = now.getDate() - day + (day===0?-6:1);
+  const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+  monday.setHours(0,0,0,0);
+  const result = [];
+  for (let i=0;i<7;i++) {
+    const d = new Date(monday); d.setDate(monday.getDate()+i);
+    const dStr = d.toDateString();
+    const isToday = d.toDateString() === new Date().toDateString();
+    const trained = sessions.some(s => new Date(s.timestamp).toDateString() === dStr);
+    result.push({trained, isToday});
+  }
+  return result;
+}
+
+function getTodaysIntent(sessions) {
+  const today = new Date().toDateString();
+  const todaySessions = sessions.filter(s => new Date(s.timestamp).toDateString() === today);
+  for (const s of todaySessions) { if(s.intent) return s.intent; }
+  return null;
+}
+
 function renderDashboard() {
   const sessions = getSessions();
   const goals = getGoals();
   const thisWeek = sessionsThisWeek(sessions);
-  const weekMins = totalMinutes(thisWeek);
+  const thisMonth = sessionsThisMonth(sessions);
+  const weekDays = getWeekDaysTrained(sessions);
   const profile = getProfile();
   const greeting = profile?.name ? `Hey ${esc(profile.name)}` : 'FightLog';
+  const quote = getDailyQuote();
+  const todaysIntent = getTodaysIntent(sessions);
 
   let recentHTML = '';
   if (sessions.length) {
@@ -795,17 +933,19 @@ function renderDashboard() {
       <p>No sessions yet</p><p class="empty-cta">Tap "Log Training" to get started</p></div>`;
   }
 
-  // Secondary stats line
-  const secondaryParts = [];
-  if (weekMins > 0) secondaryParts.push(`${weekMins} min`);
-  if (goals.streak > 0) secondaryParts.push(`${goals.streak} day streak`);
-  if (sessions.length > 0) secondaryParts.push(`${sessions.length} total`);
-  const secondaryLine = secondaryParts.join(' \u00b7 ');
+  const dayLabels = ['M','T','W','T','F','S','S'];
+  const streakBarHTML = `<div class="streak-bar">${weekDays.map((d,i) =>
+    `<div class="streak-day"><div class="streak-day-label">${dayLabels[i]}</div>
+      <div class="streak-dot${d.trained?' trained':''}${d.isToday?' today':''}"></div></div>`).join('')}</div>`;
+
+  const weekCount = thisWeek.length;
+  const weekTarget = goals.weeklyTarget || 3;
 
   document.getElementById('page-dashboard').innerHTML = `
     <div class="page-header">
       <div class="row"><h1>${greeting}</h1><div class="spacer"></div>
         <button class="btn btn-ghost btn-sm" onclick="showHowItWorks()">&#8505;</button>
+        <button class="btn btn-ghost btn-sm" onclick="showChangelog()">&#128240;</button>
         <button class="btn btn-ghost btn-sm" onclick="editProfile()">&#9881;</button></div>
       <div class="subtitle">The Striking Arts Journal</div>
     </div>
@@ -813,8 +953,23 @@ function renderDashboard() {
       <div class="hero-stat">
         <div class="hero-val">${thisWeek.length}</div>
         <div class="hero-label">Sessions This Week</div>
-        ${secondaryLine?`<div class="hero-secondary">${secondaryLine}</div>`:''}
       </div>
+
+      ${streakBarHTML}
+
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-val">${weekCount}/${weekTarget}</div><div class="stat-label">This Week</div></div>
+        <div class="stat-card"><div class="stat-val">${thisMonth.length}</div><div class="stat-label">This Month</div></div>
+        <div class="stat-card"><div class="stat-val">${goals.streak}</div><div class="stat-label">Streak</div></div>
+        <div class="stat-card"><div class="stat-val">${goals.longestStreak}</div><div class="stat-label">Best</div></div>
+      </div>
+
+      <div class="daily-quote">
+        <div class="quote-text">"${esc(quote.text)}"</div>
+        <div class="quote-author">— ${esc(quote.author)}</div>
+      </div>
+
+      ${todaysIntent ? `<div class="intent-card"><div class="intent-label">Today's Focus</div><div class="intent-text">${esc(todaysIntent)}</div></div>` : ''}
 
       ${!localStorage.getItem('fl_welcome_dismissed') ? `<div class="welcome-card">
         <h3>Two ways to log</h3>
@@ -854,7 +1009,7 @@ function sessionRowHTML(s) {
   const t = SESSION_TYPES.find(x=>x.id===s.type)||{icon:'🥊'};
   const d = new Date(s.timestamp);
   const dateStr = formatDate(d);
-  const meta = [s.duration+'m', s.intensity, s.drills?.length?s.drills.length+' drills':null, s.techniques?.length?s.techniques.length+' tech':null].filter(Boolean).join(' · ');
+  const meta = [s.duration+'m', s.intensity, s.partner?'w/ '+s.partner:null, s.drills?.length?s.drills.length+' drills':null, s.techniques?.length?s.techniques.length+' tech':null].filter(Boolean).join(' · ');
   return `<div class="session-row" onclick="showSessionDetail('${s.id}')">
     <div class="session-icon">${t.icon}</div>
     <div class="session-info"><div class="session-type">${s.type}</div><div class="session-meta">${meta}</div></div>
@@ -877,7 +1032,7 @@ function formatDate(d) {
 // ══════════════════════════════════════════════
 
 function openQuickLog() {
-  ql = {type:'Class',duration:60,intensity:null,techniques:new Set(),combos:new Set(),notes:''};
+  ql = {type:'Class',duration:60,intensity:null,techniques:new Set(),combos:new Set(),notes:'',intent:'',partner:''};
   renderQuickLog(); openModal('modalQuickLog');
 }
 
@@ -889,10 +1044,17 @@ function renderQuickLog() {
   const fallbackTech = suggested.length ? suggested : techs.slice(0,15);
   const fallbackCombo = sugCombos.length ? sugCombos : combos.slice(0,10);
 
+  const showPartner = ['Sparring','Pad Work','Class','Drilling'].includes(ql.type);
+
   document.getElementById('modalQuickLogInner').innerHTML = `
     <div class="row" style="margin-bottom:16px">
       <h2>Log Training</h2><div class="spacer"></div>
       <button class="btn btn-ghost btn-sm" style="color:var(--text2)" onclick="closeModal('modalQuickLog')">Cancel</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Focus for today</div>
+      <input type="text" placeholder="e.g. Work on head movement, stay relaxed..." value="${esc(ql.intent)}" oninput="ql.intent=this.value">
     </div>
 
     <div class="section">
@@ -902,6 +1064,11 @@ function renderQuickLog() {
           <span class="t-icon">${t.icon}</span>${t.id}</button>`).join('')}
       </div>
     </div>
+
+    ${showPartner ? `<div class="section">
+      <div class="section-title">Training Partner</div>
+      <input type="text" placeholder="Partner name (optional)" value="${esc(ql.partner)}" oninput="ql.partner=this.value">
+    </div>` : ''}
 
     <div class="section">
       <div class="section-title">Duration</div>
@@ -969,7 +1136,8 @@ function saveQuickLog() {
     id: Date.now().toString(),
     type: ql.type, duration: ql.duration, intensity: ql.intensity,
     techniques: selTechNames, combos: selComboNums,
-    notes: ql.notes, timestamp: new Date().toISOString()
+    notes: ql.notes, intent: ql.intent || null, partner: ql.partner || null,
+    timestamp: new Date().toISOString()
   });
   saveSessions(sessions);
   updateStreak();
@@ -1001,7 +1169,7 @@ function updateStreak() {
 function openVoiceLog() {
   const p = getProfile();
   vl = {phase:'quickContext',recording:false,error:null,
-    selType:p?.typicalType||'Class',selDur:p?.typicalDuration||60,selInt:p?.typicalIntensity||'Moderate',didSpar:p?.typicalSpar||false,
+    selType:p?.typicalType||'Class',selDur:p?.typicalDuration||60,selInt:p?.typicalIntensity||'Moderate',didSpar:p?.typicalSpar||false,intent:'',partner:'',
     conversation:[],currentQuestion:'',currentAnswer:'',isLoadingQ:false,
     sugType:null,sugDur:null,sugInt:null,sugTech:[],sugCombo:[],sugDrills:[],
     wentWell:null,toImprove:null,followUp:[],
@@ -1049,6 +1217,12 @@ function renderVLQuickContext() {
         <button class="spar-btn ${vl.didSpar?'on':'off'}" onclick="vl.didSpar=true;renderVoiceLog()">Yes</button>
         <button class="spar-btn ${!vl.didSpar?'on':'off'}" onclick="vl.didSpar=false;renderVoiceLog()">No</button>
       </div></div>
+
+    <div class="section"><div class="section-title">Focus for today</div>
+      <input type="text" placeholder="e.g. Work on head movement..." value="${esc(vl.intent)}" oninput="vl.intent=this.value"></div>
+
+    ${['Sparring','Pad Work','Class','Drilling'].includes(vl.selType) ? `<div class="section"><div class="section-title">Training Partner</div>
+      <input type="text" placeholder="Partner name (optional)" value="${esc(vl.partner)}" oninput="vl.partner=this.value"></div>` : ''}
 
     ${!hasKey?`<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px" onclick="showApiKeyModal()">&#128273; Add API Key to Continue</button>`:''}
     <button class="btn btn-primary btn-full" style="margin-top:16px" onclick="startGuidedRecall()" ${!hasKey?'disabled':''}>&#127908; Start Recall</button>
@@ -1480,7 +1654,8 @@ function saveVoiceLog() {
 
   const sessions=getSessions();
   sessions.unshift({id:Date.now().toString(),type:vl.selType,duration:vl.selDur,intensity:vl.selInt,
-    techniques:[...vl.selTech],combos:[...vl.selCombo],drills:vl.sugDrills,notes:vl.notes,timestamp:new Date().toISOString()});
+    techniques:[...vl.selTech],combos:[...vl.selCombo],drills:vl.sugDrills,notes:vl.notes,
+    intent:vl.intent||null,partner:vl.partner||null,timestamp:new Date().toISOString()});
   saveSessions(sessions);
   updateStreak();
   closeModal('modalVoiceLog');
@@ -1492,13 +1667,53 @@ function saveVoiceLog() {
 //  SESSIONS LIST
 // ══════════════════════════════════════════════
 
-function renderSessions() {
+function setSessionFilter(f) { sessionFilter = sessionFilter===f ? null : f; renderSessions(); }
+
+function getFilteredSessions() {
   const sessions = getSessions();
+  if (!sessionFilter) return sessions;
+  const now = new Date();
+  const todayStr = now.toDateString();
+  const yesterday = new Date(now); yesterday.setDate(now.getDate()-1);
+  const yestStr = yesterday.toDateString();
+
+  if (sessionFilter==='today') return sessions.filter(s => new Date(s.timestamp).toDateString()===todayStr);
+  if (sessionFilter==='yesterday') return sessions.filter(s => new Date(s.timestamp).toDateString()===yestStr);
+  if (sessionFilter==='thisWeek') return sessionsThisWeek(sessions);
+  if (sessionFilter==='lastWeek') {
+    const day = now.getDay(), diff = now.getDate()-day+(day===0?-6:1);
+    const thisMonday = new Date(now.getFullYear(),now.getMonth(),diff); thisMonday.setHours(0,0,0,0);
+    const lastMonday = new Date(thisMonday); lastMonday.setDate(thisMonday.getDate()-7);
+    return sessions.filter(s => { const d=new Date(s.timestamp); return d>=lastMonday && d<thisMonday; });
+  }
+  // YYYY-MM-DD date
+  if (/^\d{4}-\d{2}-\d{2}$/.test(sessionFilter)) {
+    const target = new Date(sessionFilter+'T00:00:00').toDateString();
+    return sessions.filter(s => new Date(s.timestamp).toDateString()===target);
+  }
+  return sessions;
+}
+
+function renderSessions() {
+  const all = getSessions();
+  const filtered = getFilteredSessions();
+  const subtitle = sessionFilter ? `${filtered.length} of ${all.length}` : `${all.length} total`;
+  const filters = [
+    {id:null,label:'All'},{id:'today',label:'Today'},{id:'yesterday',label:'Yesterday'},
+    {id:'thisWeek',label:'This Week'},{id:'lastWeek',label:'Last Week'}
+  ];
+
   document.getElementById('page-sessions').innerHTML = `
-    <div class="page-header"><h1>Sessions</h1><div class="subtitle">${sessions.length} total</div></div>
+    <div class="page-header"><h1>Sessions</h1><div class="subtitle">${subtitle}</div></div>
     <div class="page-content">
-      ${sessions.length ? sessions.map(s=>sessionRowHTML(s)).join('') :
-        `<div class="empty-state"><span class="empty-icon">&#128203;</span><p>No sessions yet</p></div>`}
+      <div class="filter-chips">
+        ${filters.map(f => `<button class="filter-chip${sessionFilter===f.id?' active':''}" onclick="setSessionFilter(${f.id===null?'null':"'"+f.id+"'"})">
+          ${f.label}</button>`).join('')}
+        <input type="date" class="filter-chip" style="border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:13px;padding:6px 10px;border-radius:8px"
+          onchange="sessionFilter=this.value;renderSessions()">
+      </div>
+      ${filtered.length ? filtered.map(s=>sessionRowHTML(s)).join('') :
+        `<div class="empty-state"><span class="empty-icon">&#128203;</span><p>No sessions${sessionFilter?' matching filter':''}</p></div>`}
     </div>`;
 }
 
@@ -1517,12 +1732,15 @@ function renderSessionDetail(s) {
   document.getElementById('modalSessionDetailInner').innerHTML = `
     <div class="row" style="margin-bottom:16px">
       <h2>${t.icon} ${s.type}</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="shareSession('${s.id}')">Share</button>
       <button class="btn btn-ghost btn-sm" onclick="startEditSession('${s.id}')">Edit</button>
       <button class="btn btn-ghost btn-sm" style="color:var(--text2)" onclick="closeModal('modalSessionDetail')">Close</button>
     </div>
+    ${s.intent?`<div class="intent-card"><div class="intent-label">Session Focus</div><div class="intent-text">${esc(s.intent)}</div></div>`:''}
     <div class="card">
       <div class="row"><span style="color:var(--text2)">Duration</span><div class="spacer"></div><strong>${s.duration} min</strong></div>
       ${s.intensity?`<div class="row" style="margin-top:8px"><span style="color:var(--text2)">Intensity</span><div class="spacer"></div><strong>${s.intensity}</strong></div>`:''}
+      ${s.partner?`<div class="row" style="margin-top:8px"><span style="color:var(--text2)">Partner</span><div class="spacer"></div><strong>${esc(s.partner)}</strong></div>`:''}
       <div class="row" style="margin-top:8px"><span style="color:var(--text2)">Date</span><div class="spacer"></div><span>${new Date(s.timestamp).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</span></div>
     </div>
     ${s.drills?.length?`<div class="section"><div class="section-title">Workout Breakdown</div>${s.drills.map(d=>renderDrillBlock(d)).join('')}</div>`:''}
@@ -1594,6 +1812,12 @@ function renderEditSession() {
       }).join('')}</div></div>
 
     ${drillsHTML}
+
+    <div class="section"><div class="section-title">Focus / Intent</div>
+      <input type="text" placeholder="What was your focus?" value="${esc(s.intent||'')}" onchange="editSession.intent=this.value||null"></div>
+
+    <div class="section"><div class="section-title">Training Partner</div>
+      <input type="text" placeholder="Partner name" value="${esc(s.partner||'')}" onchange="editSession.partner=this.value||null"></div>
 
     <div class="section"><div class="section-title">Notes</div>
       <textarea placeholder="Notes..." onchange="editSession.notes=this.value">${esc(s.notes||'')}</textarea></div>
@@ -1875,6 +2099,151 @@ function resetTimer() {
   stopTimer();
   timer.currentRound=0; timer.timeLeft=0; timer.isRest=false;
   renderTimer();
+}
+
+// ══════════════════════════════════════════════
+//  SHARE SESSION
+// ══════════════════════════════════════════════
+
+function shareSession(id) {
+  const s = getSessions().find(x=>x.id===id);
+  if(!s) return;
+  const d = new Date(s.timestamp);
+  const dateStr = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  let text = `FightLog - ${s.type} Session\n`;
+  text += `${dateStr}\n`;
+  text += `${s.duration} min`;
+  if(s.intensity) text += ` | ${s.intensity}`;
+  if(s.partner) text += ` | w/ ${s.partner}`;
+  text += '\n';
+  if(s.intent) text += `\nFocus: ${s.intent}`;
+  if(s.drills?.length) {
+    text += '\n\nWorkout:';
+    for(const dr of s.drills) {
+      text += `\n- ${dr.name}`;
+      if(dr.description) text += `: ${dr.description}`;
+      if(dr.combos?.length) text += ` [${dr.combos.join(', ')}]`;
+    }
+  }
+  if(s.techniques?.length) text += `\n\nTechniques: ${s.techniques.join(', ')}`;
+  if(s.combos?.length) text += `\nCombos: ${s.combos.join(', ')}`;
+  if(s.notes) text += `\n\nNotes: ${s.notes}`;
+
+  if(navigator.share) {
+    navigator.share({title:'FightLog Session',text}).catch(()=>{});
+  } else if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard')).catch(()=>showToast('Copy failed'));
+  } else {
+    showToast('Share not supported');
+  }
+}
+
+// ══════════════════════════════════════════════
+//  CHANGELOG
+// ══════════════════════════════════════════════
+
+function showChangelog() {
+  document.getElementById('modalApiKeyInner').innerHTML = `
+    <h2>What's New</h2>
+    ${CHANGELOG.map(e => `<div class="changelog-entry">
+      <span class="changelog-ver">v${esc(e.ver)}</span><span class="changelog-date">${esc(e.date)}</span>
+      <ul class="changelog-list">${e.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+    </div>`).join('')}
+    <button class="btn btn-secondary btn-full" onclick="closeModal('modalApiKey')">Close</button>`;
+  openModal('modalApiKey');
+}
+
+// ══════════════════════════════════════════════
+//  STATS (HEATMAP)
+// ══════════════════════════════════════════════
+
+function getWeekBoundaries(numWeeks) {
+  const now = new Date();
+  const day = now.getDay(), diff = now.getDate()-day+(day===0?-6:1);
+  const thisMonday = new Date(now.getFullYear(), now.getMonth(), diff);
+  thisMonday.setHours(0,0,0,0);
+  // End of this week = next Monday
+  const endOfWeek = new Date(thisMonday); endOfWeek.setDate(thisMonday.getDate()+7);
+  const weeks = [];
+  for(let i=0; i<numWeeks; i++) {
+    const start = new Date(thisMonday); start.setDate(thisMonday.getDate()-i*7);
+    const end = new Date(start); end.setDate(start.getDate()+7);
+    const label = i===0 ? 'This Week' : i===1 ? 'Last Week' : `${i}w ago`;
+    weeks.unshift({start,end,label});
+  }
+  return weeks;
+}
+
+function getComboFrequencies(sessions, weeks) {
+  // Collect all combos used across all sessions
+  const comboSet = new Set();
+  for(const s of sessions) { for(const c of (s.combos||[])) comboSet.add(c); }
+  const combos = [...comboSet].sort();
+
+  // Build frequency map: combo -> [count per week]
+  const freq = {};
+  for(const c of combos) {
+    freq[c] = weeks.map(w => {
+      return sessions.filter(s => {
+        const d = new Date(s.timestamp);
+        return d>=w.start && d<w.end && (s.combos||[]).includes(c);
+      }).length;
+    });
+  }
+  return {combos, freq};
+}
+
+function renderStats() {
+  const sessions = getSessions();
+  const weeks = getWeekBoundaries(4);
+  const {combos, freq} = getComboFrequencies(sessions, weeks);
+
+  // Summary stats
+  const uniqueCombos = combos.length;
+  let mostDrilled = '-', leastDrilled = '-';
+  if(combos.length) {
+    const totals = combos.map(c => ({combo:c, total:freq[c].reduce((a,b)=>a+b,0)}));
+    totals.sort((a,b)=>b.total-a.total);
+    mostDrilled = totals[0].combo;
+    const nonZero = totals.filter(t=>t.total>0);
+    leastDrilled = nonZero.length ? nonZero[nonZero.length-1].combo : '-';
+  }
+
+  // Find max frequency for color scaling
+  let maxFreq = 1;
+  for(const c of combos) { for(const v of freq[c]) { if(v>maxFreq) maxFreq=v; } }
+
+  // Build heatmap grid
+  const cols = weeks.length + 1; // label + weeks
+  let heatmapHTML = '';
+  if(combos.length) {
+    heatmapHTML = `<div class="heatmap-grid" style="grid-template-columns:100px repeat(${weeks.length},1fr)">
+      <div></div>${weeks.map(w=>`<div class="heatmap-header">${w.label}</div>`).join('')}
+      ${combos.map(c => {
+        const cells = freq[c].map(v => {
+          const opacity = v===0 ? 0 : Math.max(0.15, v/maxFreq);
+          const bg = v===0 ? 'var(--surface2)' : `rgba(196,149,106,${opacity})`;
+          return `<div class="heatmap-cell" style="background:${bg}">${v||''}</div>`;
+        }).join('');
+        return `<div class="heatmap-label">${esc(c)}</div>${cells}`;
+      }).join('')}
+    </div>`;
+  } else {
+    heatmapHTML = `<div class="empty-state" style="padding:32px"><span class="empty-icon">&#128200;</span>
+      <p>No combo data yet</p><p class="empty-cta">Log sessions with combos to see your heatmap</p></div>`;
+  }
+
+  document.getElementById('page-stats').innerHTML = `
+    <div class="page-header"><h1>Stats</h1><div class="subtitle">Combo frequency over 4 weeks</div></div>
+    <div class="page-content">
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-val">${uniqueCombos}</div><div class="stat-label">Unique Combos</div></div>
+        <div class="stat-card"><div class="stat-val" style="font-size:16px">${esc(mostDrilled)}</div><div class="stat-label">Most Drilled</div></div>
+        <div class="stat-card"><div class="stat-val" style="font-size:16px">${esc(leastDrilled)}</div><div class="stat-label">Least Drilled</div></div>
+      </div>
+      <div class="section-title">Combo Heatmap</div>
+      ${heatmapHTML}
+    </div>`;
 }
 
 // ══════════════════════════════════════════════
