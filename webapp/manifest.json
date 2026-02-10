@@ -4,8 +4,8 @@
   "description": "The Striking Arts Training Journal",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#0C0C0E",
+  "theme_color": "#0C0C0E",
   "icons": [
     {
       "src": "icon.svg",
