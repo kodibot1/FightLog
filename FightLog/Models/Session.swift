@@ -50,6 +50,29 @@ enum Intensity: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+struct DrillEntry: Codable, Identifiable, Hashable {
+    var id: UUID = UUID()
+    let name: String
+    let description: String
+    let combos: [String]
+
+    var icon: String {
+        let lower = name.lowercased()
+        if lower.contains("warmup") || lower.contains("warm up") { return "flame" }
+        if lower.contains("shadow") { return "figure.martial.arts" }
+        if lower.contains("pad") || lower.contains("mitt") { return "hands.clap.fill" }
+        if lower.contains("bag") { return "figure.kickboxing" }
+        if lower.contains("spar") { return "figure.boxing" }
+        if lower.contains("drill") { return "arrow.triangle.2.circlepath" }
+        if lower.contains("conditioning") || lower.contains("cardio") || lower.contains("circuit") { return "bolt.fill" }
+        if lower.contains("cool") || lower.contains("stretch") { return "wind" }
+        if lower.contains("clinch") { return "person.2.fill" }
+        if lower.contains("footwork") { return "shoeprints.fill" }
+        if lower.contains("defense") || lower.contains("defensive") { return "shield.fill" }
+        return "figure.boxing"
+    }
+}
+
 @Model
 final class Session {
     var id: UUID
@@ -62,6 +85,9 @@ final class Session {
     // Location (simple name, not GPS)
     var location: Location?
 
+    // Structured workout breakdown (stored as JSON string)
+    var drillsJSON: String?
+
     @Relationship(deleteRule: .nullify, inverse: \Technique.sessions)
     var techniques: [Technique]
 
@@ -70,6 +96,20 @@ final class Session {
 
     @Relationship(deleteRule: .nullify, inverse: \ProgressNote.session)
     var progressNotes: [ProgressNote]
+
+    var drills: [DrillEntry] {
+        get {
+            guard let json = drillsJSON, let data = json.data(using: .utf8) else { return [] }
+            return (try? JSONDecoder().decode([DrillEntry].self, from: data)) ?? []
+        }
+        set {
+            if newValue.isEmpty {
+                drillsJSON = nil
+            } else {
+                drillsJSON = (try? String(data: JSONEncoder().encode(newValue), encoding: .utf8)) ?? nil
+            }
+        }
+    }
 
     init(
         sessionType: SessionType,
@@ -80,6 +120,7 @@ final class Session {
         techniques: [Technique] = [],
         combos: [Combo] = [],
         progressNotes: [ProgressNote] = [],
+        drills: [DrillEntry] = [],
         timestamp: Date = Date()
     ) {
         self.id = UUID()
@@ -92,5 +133,8 @@ final class Session {
         self.combos = combos
         self.progressNotes = progressNotes
         self.timestamp = timestamp
+        if !drills.isEmpty {
+            self.drillsJSON = try? String(data: JSONEncoder().encode(drills), encoding: .utf8)
+        }
     }
 }

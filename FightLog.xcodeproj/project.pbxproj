@@ -54,6 +54,11 @@
 		A10000000000000000000045 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000045 /* UserProfile.swift */; };
 		A10000000000000000000046 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000046 /* OnboardingView.swift */; };
 		A10000000000000000000047 /* AddExerciseSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000047 /* AddExerciseSheet.swift */; };
+		A10000000000000000000048 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000048 /* AIService.swift */; };
+		A10000000000000000000049 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000049 /* SpeechRecognitionService.swift */; };
+		A10000000000000000000050 /* APIKeySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* APIKeySheet.swift */; };
+		A10000000000000000000051 /* VoiceLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000051 /* VoiceLogViewModel.swift */; };
+		A10000000000000000000052 /* VoiceLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000052 /* VoiceLogSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +109,11 @@
 		A20000000000000000000045 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A20000000000000000000046 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		A20000000000000000000047 /* AddExerciseSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000048 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		A20000000000000000000049 /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
+		A20000000000000000000050 /* APIKeySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeySheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000051 /* VoiceLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLogViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000052 /* VoiceLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLogSheet.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* FightLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FightLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -173,6 +183,7 @@
 				A20000000000000000000006 /* SessionViewModel.swift */,
 				A20000000000000000000007 /* TechniqueViewModel.swift */,
 				A20000000000000000000008 /* NoteViewModel.swift */,
+				A20000000000000000000051 /* VoiceLogViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -193,6 +204,7 @@
 				A50000000000000000000018 /* Schedule */,
 				A50000000000000000000019 /* People */,
 				A50000000000000000000020 /* Onboarding */,
+				A50000000000000000000021 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,6 +215,7 @@
 				A20000000000000000000010 /* DashboardView.swift */,
 				A20000000000000000000011 /* QuickLogSheet.swift */,
 				A20000000000000000000012 /* QuickNoteSheet.swift */,
+				A20000000000000000000052 /* VoiceLogSheet.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -268,6 +281,8 @@
 			isa = PBXGroup;
 			children = (
 				A20000000000000000000038 /* NotificationManager.swift */,
+				A20000000000000000000048 /* AIService.swift */,
+				A20000000000000000000049 /* SpeechRecognitionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -322,6 +337,14 @@
 				A20000000000000000000046 /* OnboardingView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000021 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000050 /* APIKeySheet.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -439,6 +462,11 @@
 				A10000000000000000000045 /* UserProfile.swift in Sources */,
 				A10000000000000000000046 /* OnboardingView.swift in Sources */,
 				A10000000000000000000047 /* AddExerciseSheet.swift in Sources */,
+				A10000000000000000000048 /* AIService.swift in Sources */,
+				A10000000000000000000049 /* SpeechRecognitionService.swift in Sources */,
+				A10000000000000000000050 /* APIKeySheet.swift in Sources */,
+				A10000000000000000000051 /* VoiceLogViewModel.swift in Sources */,
+				A10000000000000000000052 /* VoiceLogSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +607,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FightLog needs microphone access to record your training session descriptions using voice input.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FightLog uses speech recognition to convert your voice into text for quick session logging.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -604,6 +634,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "FightLog needs microphone access to record your training session descriptions using voice input.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "FightLog uses speech recognition to convert your voice into text for quick session logging.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

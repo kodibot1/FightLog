@@ -9,6 +9,7 @@ struct DashboardView: View {
     @Query private var profiles: [UserProfile]
 
     @State private var showingLogSheet = false
+    @State private var showingVoiceLog = false
     @State private var showingNoteSheet = false
     @State private var showingTimer = false
 
@@ -16,22 +17,36 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Quick Log Button
-                    Button {
-                        showingLogSheet = true
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title)
-                            Text("Log Training")
-                                .font(.title2.bold())
+                    // Quick Log Buttons
+                    HStack(spacing: 12) {
+                        Button {
+                            showingLogSheet = true
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        } label: {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title)
+                                Text("Log Training")
+                                    .font(.title2.bold())
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 64)
+                            .background(Color.orange)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
                         }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 64)
-                        .background(Color.orange)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                        Button {
+                            showingVoiceLog = true
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        } label: {
+                            Image(systemName: "mic.fill")
+                                .font(.title2)
+                                .frame(width: 64, height: 64)
+                                .background(Color.purple)
+                                .foregroundStyle(.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
                     }
                     .padding(.horizontal)
 
@@ -136,6 +151,9 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showingLogSheet) {
                 QuickLogSheet()
+            }
+            .sheet(isPresented: $showingVoiceLog) {
+                VoiceLogSheet()
             }
             .sheet(isPresented: $showingNoteSheet) {
                 QuickNoteSheet()

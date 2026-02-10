@@ -62,6 +62,24 @@ struct SessionDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .padding(.horizontal)
 
+                // Workout Breakdown
+                if !session.drills.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "list.bullet.rectangle")
+                                .foregroundStyle(.orange)
+                            Text("Workout Breakdown")
+                                .font(.headline)
+                        }
+                        .padding(.horizontal)
+
+                        ForEach(session.drills) { drill in
+                            DrillBlockView(drill: drill)
+                                .padding(.horizontal)
+                        }
+                    }
+                }
+
                 // Techniques
                 if !session.techniques.isEmpty {
                     VStack(alignment: .leading, spacing: 12) {

@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<title>FightLog</title>
+<style>
+:root {
+  --orange: #FF9500; --purple: #AF52DE; --red: #FF3B30; --green: #34C759;
+  --blue: #007AFF; --yellow: #FFCC00; --cyan: #32D7E0;
+  --bg: #000; --card: #1C1C1E; --card2: #2C2C2E; --card3: #3A3A3C;
+  --text: #FFF; --text2: #8E8E93; --text3: #48484A;
+  --tab-h: 82px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; overflow-x:hidden; }
+button { font-family:inherit; }
+
+/* ── Tab Bar ── */
+.tab-bar {
+  position:fixed; bottom:0; left:0; right:0; height:var(--tab-h);
+  background:rgba(28,28,30,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid #2C2C2E; display:flex; z-index:100;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.tab { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; background:none; border:none; color:var(--text2); font-size:10px; cursor:pointer; padding-top:8px; }
+.tab.active { color:var(--orange); }
+.tab .tab-icon { font-size:22px; }
+
+/* ── Page Container ── */
+.page { padding:0 0 calc(var(--tab-h) + 10px) 0; display:none; min-height:100dvh; }
+.page.active { display:block; }
+.page-header { padding:50px 16px 12px; position:sticky; top:0; background:var(--bg); z-index:10; }
+.page-header h1 { font-size:28px; font-weight:800; }
+.page-header .subtitle { font-size:13px; color:var(--text2); margin-top:2px; }
+.page-content { padding:0 16px 20px; }
+
+/* ── Common ── */
+.btn { border:none; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity 0.2s; }
+.btn:disabled { opacity:0.4; cursor:default; }
+.btn-orange { background:var(--orange); color:#fff; }
+.btn-green { background:var(--green); color:#fff; }
+.btn-red { background:var(--red); color:#fff; }
+.btn-purple { background:var(--purple); color:#fff; }
+.btn-ghost { background:none; color:var(--orange); }
+.btn-card { background:var(--card); color:var(--text); }
+.btn-full { width:100%; height:50px; }
+.btn-sm { height:36px; padding:0 14px; font-size:14px; border-radius:10px; }
+
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { padding:8px 14px; border-radius:20px; font-size:14px; border:none; cursor:pointer;
+  transition:all 0.15s; white-space:nowrap; background:var(--card3); color:var(--text); }
+.chip.selected { background:var(--orange); color:#fff; }
+.chip.combo-sel { background:var(--red); color:#fff; }
+
+.section { margin-bottom:24px; }
+.section-title { font-size:13px; font-weight:600; color:var(--text2); text-transform:uppercase;
+  letter-spacing:0.5px; margin-bottom:10px; }
+
+.card { background:var(--card); border-radius:14px; padding:16px; margin-bottom:10px; }
+.empty-state { text-align:center; padding:40px 20px; color:var(--text2); }
+.empty-state .empty-icon { font-size:48px; margin-bottom:12px; display:block; }
+
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200;
+  display:none; align-items:flex-end; justify-content:center; }
+.modal-bg.show { display:flex; }
+.modal { background:var(--card); border-radius:20px 20px 0 0; padding:24px 20px calc(20px + env(safe-area-inset-bottom,20px));
+  width:100%; max-width:500px; max-height:90dvh; overflow-y:auto; }
+.modal h2 { font-size:18px; font-weight:700; margin-bottom:16px; }
+
+input[type=text], input[type=number], input[type=password], textarea, select {
+  width:100%; padding:14px; background:var(--card2); border:1px solid transparent; border-radius:12px;
+  color:var(--text); font-size:15px; font-family:inherit; }
+input:focus, textarea:focus, select:focus { outline:none; border-color:var(--orange); }
+input::placeholder, textarea::placeholder { color:#555; }
+textarea { resize:vertical; min-height:80px; }
+select { appearance:none; }
+
+.row { display:flex; align-items:center; gap:12px; }
+.spacer { flex:1; }
+
+/* ── Dashboard ── */
+.dash-btns { display:flex; gap:10px; margin-bottom:20px; }
+.dash-log-btn { flex:1; height:60px; border-radius:14px; font-size:17px; }
+.dash-mic-btn { width:60px; height:60px; border-radius:14px; font-size:22px; }
+.quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.quick-card { background:var(--card); border-radius:12px; height:70px; display:flex;
+  flex-direction:column; align-items:center; justify-content:center; gap:6px;
+  border:none; cursor:pointer; color:var(--text); }
+.quick-card .qc-icon { font-size:22px; }
+.quick-card .qc-label { font-size:12px; }
+
+.stat-row { display:flex; gap:10px; margin-bottom:20px; }
+.stat-card { flex:1; background:var(--card); border-radius:12px; padding:14px; text-align:center; }
+.stat-card .stat-val { font-size:24px; font-weight:800; color:var(--orange); }
+.stat-card .stat-label { font-size:11px; color:var(--text2); margin-top:2px; }
+
+.session-row { display:flex; align-items:center; gap:12px; padding:14px;
+  background:var(--card); border-radius:12px; margin-bottom:8px; cursor:pointer; }
+.session-icon { width:42px; height:42px; background:rgba(255,149,0,0.15); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.session-info { flex:1; }
+.session-type { font-weight:600; font-size:15px; }
+.session-meta { font-size:12px; color:var(--text2); margin-top:2px; }
+.session-date { font-size:12px; color:var(--text2); }
+
+/* ── Quick Log ── */
+.type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.type-btn { height:72px; border-radius:12px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:6px; background:var(--card);
+  color:var(--text); border:none; cursor:pointer; font-size:13px; position:relative; }
+.type-btn .t-icon { font-size:22px; }
+.type-btn.selected { background:var(--orange); color:#fff; }
+
+.dur-row { display:flex; gap:8px; }
+.dur-btn { flex:1; height:42px; border-radius:10px; border:none; cursor:pointer;
+  background:var(--card); color:var(--text); font-weight:600; font-size:14px; }
+.dur-btn.selected { background:var(--orange); color:#fff; }
+
+.int-row { display:flex; gap:8px; }
+.int-btn { flex:1; height:42px; border-radius:10px; border:none; cursor:pointer;
+  background:var(--card); color:var(--text); font-size:14px; }
+.int-btn.sel-light { background:var(--green); color:#fff; }
+.int-btn.sel-mod { background:var(--orange); color:#fff; }
+.int-btn.sel-hard { background:var(--red); color:#fff; }
+
+.stepper { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:14px; color:var(--text2); }
+.stepper-btn { width:32px; height:32px; border-radius:8px; border:none;
+  background:var(--card); color:var(--text); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; }
+
+/* ── Voice Log ── */
+.ai-badge { position:absolute; top:-4px; right:-4px; width:18px; height:18px;
+  background:var(--purple); border-radius:50%; font-size:10px;
+  display:flex; align-items:center; justify-content:center; }
+.insight-card { padding:14px; border-radius:12px; margin-bottom:8px; }
+.insight-card.green-bg { background:rgba(52,199,89,0.12); }
+.insight-card.orange-bg { background:rgba(255,149,0,0.12); }
+.insight-label { font-size:12px; font-weight:700; margin-bottom:4px; }
+.insight-card.green-bg .insight-label { color:var(--green); }
+.insight-card.orange-bg .insight-label { color:var(--orange); }
+
+/* Quick context */
+.vl-header { text-align:center; margin-bottom:20px; }
+.vl-header-icon { font-size:40px; color:var(--orange); margin-bottom:8px; }
+.vl-header h2 { margin:0 0 4px; }
+.vl-header p { font-size:14px; color:var(--text2); margin:0; }
+
+.spar-row { display:flex; gap:12px; }
+.spar-btn { flex:1; height:44px; border-radius:10px; border:none; font-size:14px; font-weight:700;
+  cursor:pointer; transition:all 0.2s; }
+.spar-btn.off { background:var(--card); color:var(--text); }
+.spar-btn.on { background:var(--orange); color:#fff; }
+
+/* Chat bubbles */
+.vl-chat { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; }
+.vl-bubble { max-width:80%; padding:12px; border-radius:16px; font-size:15px; line-height:1.4; word-wrap:break-word; }
+.vl-bubble-ai { align-self:flex-start; background:var(--card); display:flex; gap:8px; align-items:flex-start; }
+.vl-bubble-ai .ai-icon { width:24px; height:24px; border-radius:50%; background:rgba(175,82,222,0.15);
+  display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; color:var(--purple); }
+.vl-bubble-user { align-self:flex-end; background:var(--orange); color:#fff; }
+.vl-bubble-skip { align-self:flex-end; background:var(--card); color:var(--text2); font-style:italic; font-size:13px; padding:8px 12px; }
+.vl-bubble-ctx { align-self:flex-start; background:rgba(255,149,0,0.12); font-size:13px; font-weight:600; padding:8px 12px; }
+.vl-typing { display:flex; gap:4px; padding:14px; }
+.vl-typing span { width:8px; height:8px; border-radius:50%; background:var(--text2); opacity:0.5;
+  animation:typingDot 1.2s infinite; }
+.vl-typing span:nth-child(2) { animation-delay:0.2s; }
+.vl-typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes typingDot { 0%,60%,100%{opacity:0.3;transform:translateY(0)} 30%{opacity:1;transform:translateY(-4px)} }
+
+/* Input bar */
+.vl-input-bar { border-top:1px solid var(--card); padding:8px 12px 12px; display:flex; gap:8px; align-items:flex-end;
+  background:var(--bg); }
+.vl-input-bar input { flex:1; height:40px; border-radius:20px; border:none; background:var(--card);
+  padding:0 14px; font-size:15px; color:var(--text); outline:none; }
+.vl-input-bar .mic-circle { width:56px; height:56px; border-radius:50%; border:none; font-size:24px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;
+  flex-shrink:0; -webkit-user-select:none; user-select:none; touch-action:none; }
+.vl-input-bar .mic-circle.idle { background:var(--orange); color:#fff; }
+.vl-input-bar .mic-circle.rec { background:var(--red); color:#fff; animation:pulse 1.2s ease-in-out infinite;
+  transform:scale(1.15); }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+/* Recording indicator */
+.vl-rec-indicator { display:flex; align-items:center; gap:10px; padding:8px 16px;
+  background:rgba(255,59,48,0.1); border-radius:12px; margin:0 12px; }
+.vl-rec-dot { width:10px; height:10px; border-radius:50%; background:var(--red);
+  animation:recPulse 1s ease-in-out infinite; }
+@keyframes recPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.vl-rec-indicator .rec-label { color:var(--red); font-size:13px; font-weight:600; flex:1; }
+.vl-waves { display:flex; align-items:center; gap:3px; height:24px; }
+.vl-waves span { width:3px; border-radius:2px; background:var(--red);
+  animation:wave 0.8s ease-in-out infinite; }
+.vl-waves span:nth-child(1) { height:8px; animation-delay:0s; }
+.vl-waves span:nth-child(2) { height:16px; animation-delay:0.1s; }
+.vl-waves span:nth-child(3) { height:24px; animation-delay:0.2s; }
+.vl-waves span:nth-child(4) { height:16px; animation-delay:0.3s; }
+.vl-waves span:nth-child(5) { height:8px; animation-delay:0.4s; }
+@keyframes wave { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+
+.vl-send { width:40px; height:40px; border-radius:50%; border:none; background:var(--orange);
+  color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+/* Progress bar */
+.vl-progress { display:flex; align-items:center; justify-content:space-between; padding:8px 16px;
+  background:var(--card); font-size:13px; }
+.vl-progress .done-btn { color:var(--orange); font-weight:700; cursor:pointer; background:none; border:none; font-size:13px; }
+
+/* Live session log */
+.vl-live-log { background:var(--card); border-radius:12px; margin:0 12px 8px; overflow:hidden; }
+.vl-live-toggle { display:flex; align-items:center; justify-content:space-between; padding:10px 14px;
+  cursor:pointer; -webkit-user-select:none; user-select:none; }
+.vl-live-toggle .label { font-size:13px; font-weight:700; color:var(--orange); }
+.vl-live-toggle .count { font-size:12px; color:var(--text2); }
+.vl-live-toggle .arrow { font-size:12px; color:var(--text2); transition:transform 0.2s; }
+.vl-live-toggle .arrow.open { transform:rotate(180deg); }
+.vl-live-body { padding:0 14px 12px; }
+.vl-live-section { margin-bottom:8px; }
+.vl-live-section .sec-label { font-size:11px; font-weight:700; color:var(--text2); text-transform:uppercase; margin-bottom:4px; }
+.vl-live-items { display:flex; flex-wrap:wrap; gap:4px; }
+.vl-live-items .item { font-size:12px; padding:3px 8px; border-radius:8px; background:rgba(255,149,0,0.15); color:var(--orange); }
+.vl-live-items .item.combo { background:rgba(255,59,48,0.15); color:var(--red); font-family:monospace; }
+.vl-live-items .item.moment { background:rgba(52,199,89,0.15); color:var(--green); }
+.vl-live-empty { font-size:12px; color:var(--text2); font-style:italic; }
+
+/* ── Technique List ── */
+.tech-cat-header { font-size:14px; font-weight:700; color:var(--orange); margin:16px 0 8px;
+  display:flex; align-items:center; gap:6px; }
+.tech-row { display:flex; align-items:center; gap:12px; padding:12px 14px;
+  background:var(--card); border-radius:10px; margin-bottom:6px; cursor:pointer; }
+.tech-name { flex:1; font-size:15px; }
+.tech-count { font-size:12px; color:var(--text2); }
+.tech-stars { font-size:12px; color:var(--yellow); }
+
+/* ── Timer ── */
+.timer-display { text-align:center; margin:30px 0; }
+.timer-time { font-size:72px; font-weight:800; font-variant-numeric:tabular-nums; }
+.timer-label { font-size:16px; color:var(--text2); margin-bottom:8px; }
+.timer-round { font-size:18px; color:var(--orange); font-weight:600; margin-bottom:20px; }
+.timer-controls { display:flex; gap:12px; justify-content:center; margin:20px 0; }
+.timer-ctrl-btn { width:64px; height:64px; border-radius:50%; border:none; font-size:24px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.timer-settings { margin-top:20px; }
+.timer-setting { display:flex; align-items:center; justify-content:space-between;
+  padding:14px; background:var(--card); border-radius:12px; margin-bottom:8px; }
+.timer-setting label { font-size:15px; }
+.timer-setting .val { display:flex; align-items:center; gap:10px; }
+
+/* ── Spinner / Toast ── */
+.spinner { width:40px; height:40px; border:3px solid var(--card2);
+  border-top-color:var(--orange); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.toast { position:fixed; bottom:calc(var(--tab-h) + 20px); left:50%;
+  transform:translateX(-50%) translateY(100px); background:var(--green); color:#fff;
+  padding:14px 24px; border-radius:12px; font-weight:600; font-size:15px;
+  transition:transform 0.3s; z-index:300; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ── Combo Number System Ref ── */
+.num-ref { font-size:11px; color:var(--text2); }
+
+/* ── Search ── */
+.search-bar { margin-bottom:14px; }
+.search-bar input { background:var(--card); border-radius:10px; padding:10px 14px;
+  font-size:15px; width:100%; border:none; color:var(--text); }
+.search-bar input::placeholder { color:var(--text3); }
+
+/* ── Drill Blocks ── */
+.drill-block { background:var(--card); border-radius:12px; padding:12px; margin-bottom:8px; }
+.drill-header { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.drill-icon { width:28px; height:28px; border-radius:6px; background:rgba(255,149,0,0.15);
+  display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.drill-name { font-size:14px; font-weight:700; }
+.drill-desc { font-size:13px; color:var(--text2); line-height:1.4; margin-bottom:6px; }
+.drill-combos { display:flex; flex-wrap:wrap; gap:4px; }
+.drill-combo-tag { font-size:11px; font-family:monospace; padding:3px 8px; border-radius:10px;
+  background:rgba(255,59,48,0.15); color:var(--red); }
+</style>
+</head>
+<body>
+
+<!-- Tab Bar -->
+<nav class="tab-bar">
+  <button class="tab active" onclick="switchTab('dashboard')">
+    <span class="tab-icon">&#127968;</span>Home
+  </button>
+  <button class="tab" onclick="switchTab('sessions')">
+    <span class="tab-icon">&#128203;</span>Sessions
+  </button>
+</nav>
+
+<!-- Pages -->
+<div class="page active" id="page-dashboard"></div>
+<div class="page" id="page-sessions"></div>
+
+<!-- Modals -->
+<div class="modal-bg" id="modalQuickLog"><div class="modal" id="modalQuickLogInner"></div></div>
+<div class="modal-bg" id="modalVoiceLog"><div class="modal" id="modalVoiceLogInner" style="max-height:95dvh"></div></div>
+<div class="modal-bg" id="modalApiKey"><div class="modal" id="modalApiKeyInner"></div></div>
+<div class="modal-bg" id="modalSessionDetail"><div class="modal" id="modalSessionDetailInner"></div></div>
+<div class="modal-bg" id="modalTechDetail"><div class="modal" id="modalTechDetailInner"></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+//  DATA & DEFAULTS
+// ══════════════════════════════════════════════
+
+const SESSION_TYPES = [
+  {id:'Class',icon:'👥'},{id:'Sparring',icon:'🥊'},{id:'Drilling',icon:'🔄'},
+  {id:'Bag Work',icon:'🦵'},{id:'Pad Work',icon:'👏'},{id:'Shadow Boxing',icon:'🥋'}
+];
+const DURATIONS = [15,30,45,60,90];
+const INTENSITIES = ['Light','Moderate','Hard'];
+const CATEGORIES = ['Punches','Kicks','Elbows','Knees','Clinch','Footwork','Defense','Combinations'];
+const CAT_ICONS = {'Punches':'👊','Kicks':'🦶','Elbows':'💪','Knees':'🦵','Clinch':'🤼','Footwork':'👟','Defense':'🛡️','Combinations':'📋'};
+
+const DEFAULT_TECHNIQUES = [
+  // Punches
+  {name:'Jab',cat:'Punches'},{name:'Cross',cat:'Punches'},{name:'Hook',cat:'Punches'},
+  {name:'Uppercut',cat:'Punches'},{name:'Body Jab',cat:'Punches'},{name:'Body Hook',cat:'Punches'},
+  {name:'Body Uppercut',cat:'Punches'},{name:'Overhand',cat:'Punches'},
+  {name:'Lead Hook',cat:'Punches'},{name:'Rear Hook',cat:'Punches'},
+  // Footwork
+  {name:'Pivot',cat:'Footwork'},{name:'Angle Out',cat:'Footwork'},{name:'Cut Angle',cat:'Footwork'},
+  {name:'In-Out Movement',cat:'Footwork'},{name:'Lateral Movement',cat:'Footwork'},
+  {name:'Step Jab',cat:'Footwork'},{name:'L-Step',cat:'Footwork'},
+  // Defense
+  {name:'Parry',cat:'Defense'},{name:'Slip',cat:'Defense'},{name:'Roll',cat:'Defense'},
+  {name:'Block',cat:'Defense'},{name:'Catch',cat:'Defense'},{name:'Pull Back',cat:'Defense'},
+  {name:'Shoulder Roll',cat:'Defense'},{name:'Duck',cat:'Defense'},
+  // Clinch
+  {name:'Collar Tie',cat:'Clinch'},{name:'Underhook',cat:'Clinch'},{name:'Body Lock',cat:'Clinch'},
+];
+
+const DEFAULT_COMBOS = [
+  {num:'1-2',name:'Basic One-Two',notes:'Jab followed by cross. Foundation of boxing.'},
+  {num:'1-1-2',name:'Double Jab Cross',notes:'Two jabs to set up the cross'},
+  {num:'1-2-3',name:'Jab Cross Hook',notes:'Classic three-punch combo'},
+  {num:'1-2-3-2',name:null,notes:'Jab, cross, hook, cross'},
+  {num:'1-2-5-2',name:null,notes:'Jab, cross, lead uppercut, cross'},
+  {num:'3-2',name:'Check Hook Cross',notes:'Lead with hook, follow with cross'},
+  {num:'3-2-3',name:null,notes:'Hook, cross, hook'},
+  {num:'2-3-2',name:'Counter Cross',notes:'Cross, hook, cross'},
+  {num:'5-2-3',name:null,notes:'Lead uppercut, cross, hook'},
+  {num:'6-3-2',name:null,notes:'Rear uppercut, lead hook, cross'},
+  {num:'1-6-3-2',name:null,notes:'Jab, rear uppercut, lead hook, cross'},
+  {num:'3-6-3',name:null,notes:'Lead hook, rear uppercut, lead hook'},
+  {num:'1-1-2-3',name:null,notes:'Double jab, cross, lead hook'},
+  {num:'2-3-6',name:null,notes:'Cross, lead hook, rear uppercut'},
+  {num:'1-2-1-2',name:null,notes:'Jab, cross, jab, cross - double one-two'},
+];
+
+const NUM_MAP = {'1':'Jab','2':'Cross','3':'Lead Hook','4':'Rear Hook','5':'Lead Uppercut',
+  '6':'Rear Uppercut','7':'Lead Body Hook','8':'Rear Body Hook','1b':'Body Jab','2b':'Body Cross'};
+
+// ══════════════════════════════════════════════
+//  STORAGE
+// ══════════════════════════════════════════════
+
+function load(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } }
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+function db() {
+  if (!localStorage.getItem('fl_init')) {
+    save('fl_techniques', DEFAULT_TECHNIQUES.map((t,i) => ({id:i, name:t.name, cat:t.cat, useCount:0, lastUsed:null, rating:0, notes:'', keyPoints:[], commonMistakes:''})));
+    save('fl_combos', DEFAULT_COMBOS.map((c,i) => ({id:i, num:c.num, name:c.name, notes:c.notes, useCount:0, lastUsed:null, isCustom:false})));
+    save('fl_sessions', []);
+    save('fl_goals', {weeklyTarget:3, streak:0, longestStreak:0, lastTrainDate:null});
+    localStorage.setItem('fl_init','1');
+    localStorage.setItem('fl_nextTechId', String(DEFAULT_TECHNIQUES.length));
+    localStorage.setItem('fl_nextComboId', String(DEFAULT_COMBOS.length));
+  }
+}
+
+function getTechniques() { return load('fl_techniques', []); }
+function saveTechniques(t) { save('fl_techniques', t); }
+function getCombos() { return load('fl_combos', []); }
+function saveCombos(c) { save('fl_combos', c); }
+function getSessions() { return load('fl_sessions', []); }
+function saveSessions(s) { save('fl_sessions', s); }
+function getGoals() { return load('fl_goals', {weeklyTarget:3, streak:0, longestStreak:0, lastTrainDate:null}); }
+function saveGoals(g) { save('fl_goals', g); }
+
+function nextTechId() { let id = parseInt(localStorage.getItem('fl_nextTechId')||'100'); localStorage.setItem('fl_nextTechId',String(id+1)); return id; }
+function nextComboId() { let id = parseInt(localStorage.getItem('fl_nextComboId')||'100'); localStorage.setItem('fl_nextComboId',String(id+1)); return id; }
+
+// ══════════════════════════════════════════════
+//  APP STATE
+// ══════════════════════════════════════════════
+
+let currentTab = 'dashboard';
+let techSearch = '';
+let comboSearch = '';
+
+// Quick Log state
+let ql = { type:'Class', duration:60, intensity:null, techniques:new Set(), combos:new Set(), notes:'' };
+
+// Voice Log state
+let vl = { phase:'quickContext', recording:false, error:null,
+  // Quick context
+  selType:'Class', selDur:60, selInt:'Moderate', didSpar:false,
+  // Guided recall
+  conversation:[], currentQuestion:'', currentAnswer:'', isLoadingQ:false,
+  // Review
+  sugType:null, sugDur:null, sugInt:null, sugTech:[], sugCombo:[], sugDrills:[],
+  wentWell:null, toImprove:null, followUp:[],
+  selTech:new Set(), selCombo:new Set(), notes:'' };
+
+// Timer state
+let timer = { rounds:5, roundTime:180, restTime:60, currentRound:0, timeLeft:0,
+  isRest:false, running:false, interval:null };
+
+let recognition = null;
+
+// ══════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  document.querySelectorAll('.tab')[['dashboard','sessions'].indexOf(tab)].classList.add('active');
+  renderPage(tab);
+}
+
+function renderPage(tab) {
+  if (tab==='dashboard') renderDashboard();
+  else if (tab==='sessions') renderSessions();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+// ══════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════
+
+function renderDashboard() {
+  const sessions = getSessions();
+  const goals = getGoals();
+  const thisWeek = sessionsThisWeek(sessions);
+
+  let recentHTML = '';
+  if (sessions.length) {
+    recentHTML = sessions.slice(0,5).map(s => sessionRowHTML(s)).join('');
+  } else {
+    recentHTML = `<div class="empty-state"><span class="empty-icon">&#129354;</span>
+      <p>No sessions yet</p><p style="font-size:13px;margin-top:4px">Tap "Log Training" to get started</p></div>`;
+  }
+
+  document.getElementById('page-dashboard').innerHTML = `
+    <div class="page-header">
+      <div class="row"><h1>FightLog</h1><div class="spacer"></div>
+        <button class="btn btn-ghost btn-sm" onclick="showApiKeyModal()">&#128273;</button></div>
+    </div>
+    <div class="page-content">
+      <div class="dash-btns">
+        <button class="btn btn-orange dash-log-btn" onclick="openQuickLog()">&#10133; Log Training</button>
+        <button class="btn btn-purple dash-mic-btn" onclick="openVoiceLog()">&#127908;</button>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-val">${thisWeek.length}</div>
+          <div class="stat-label">This Week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">${totalMinutes(thisWeek)}</div>
+          <div class="stat-label">Minutes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">${goals.streak}</div>
+          <div class="stat-label">Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">${sessions.length}</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <button class="quick-card" onclick="switchTab('sessions')"><span class="qc-icon" style="color:var(--blue)">&#128203;</span><span class="qc-label">All Sessions</span></button>
+      </div>
+
+      <div class="section-title">Recent Sessions</div>
+      ${recentHTML}
+    </div>
+  `;
+}
+
+function sessionsThisWeek(sessions) {
+  const now = new Date();
+  const day = now.getDay(), diff = now.getDate() - day + (day===0?-6:1);
+  const start = new Date(now.setHours(0,0,0,0)); start.setDate(diff);
+  return sessions.filter(s => new Date(s.timestamp) >= start);
+}
+function totalMinutes(sessions) { return sessions.reduce((a,s) => a + s.duration, 0); }
+
+function sessionRowHTML(s) {
+  const t = SESSION_TYPES.find(x=>x.id===s.type)||{icon:'🥊'};
+  const d = new Date(s.timestamp);
+  const dateStr = formatDate(d);
+  const meta = [s.duration+'m', s.intensity, s.drills?.length?s.drills.length+' drills':null, s.techniques?.length?s.techniques.length+' tech':null].filter(Boolean).join(' · ');
+  return `<div class="session-row" onclick="showSessionDetail('${s.id}')">
+    <div class="session-icon">${t.icon}</div>
+    <div class="session-info"><div class="session-type">${s.type}</div><div class="session-meta">${meta}</div></div>
+    <div class="session-date">${dateStr}</div>
+  </div>`;
+}
+
+function formatDate(d) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tgt = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = (today-tgt)/(1000*60*60*24);
+  if (diff===0) return 'Today';
+  if (diff===1) return 'Yesterday';
+  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+}
+
+// ══════════════════════════════════════════════
+//  QUICK LOG
+// ══════════════════════════════════════════════
+
+function openQuickLog() {
+  ql = {type:'Class',duration:60,intensity:null,techniques:new Set(),combos:new Set(),notes:''};
+  renderQuickLog(); openModal('modalQuickLog');
+}
+
+function renderQuickLog() {
+  const techs = getTechniques();
+  const combos = getCombos();
+  const suggested = techs.filter(t=>t.useCount>0).sort((a,b)=>b.useCount-a.useCount).slice(0,15);
+  const sugCombos = combos.filter(c=>c.useCount>0).sort((a,b)=>b.useCount-a.useCount).slice(0,10);
+  const fallbackTech = suggested.length ? suggested : techs.slice(0,15);
+  const fallbackCombo = sugCombos.length ? sugCombos : combos.slice(0,10);
+
+  document.getElementById('modalQuickLogInner').innerHTML = `
+    <div class="row" style="margin-bottom:16px">
+      <h2>Log Training</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modalQuickLog')">Cancel</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">What did you do?</div>
+      <div class="type-grid">
+        ${SESSION_TYPES.map(t => `<button class="type-btn ${ql.type===t.id?'selected':''}" onclick="ql.type='${t.id}';renderQuickLog()">
+          <span class="t-icon">${t.icon}</span>${t.id}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Duration</div>
+      <div class="dur-row">
+        ${DURATIONS.map(d => `<button class="dur-btn ${ql.duration===d?'selected':''}" onclick="ql.duration=${d};renderQuickLog()">${d}m</button>`).join('')}
+      </div>
+      <div class="stepper">Custom: <button class="stepper-btn" onclick="ql.duration=Math.max(5,ql.duration-5);renderQuickLog()">-</button>
+        <span>${ql.duration} min</span>
+        <button class="stepper-btn" onclick="ql.duration=Math.min(180,ql.duration+5);renderQuickLog()">+</button></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Intensity</div>
+      <div class="int-row">
+        ${INTENSITIES.map(i => {
+          const sel = ql.intensity===i;
+          const cls = sel ? (i==='Light'?'sel-light':i==='Moderate'?'sel-mod':'sel-hard') : '';
+          return `<button class="int-btn ${cls}" onclick="ql.intensity=ql.intensity==='${i}'?null:'${i}';renderQuickLog()">${i}</button>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Techniques</div>
+      <div class="chips">
+        ${fallbackTech.map(t => `<button class="chip ${ql.techniques.has(t.id)?'selected':''}" onclick="toggleQL('techniques',${t.id})">${esc(t.name)}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Combos</div>
+      <div class="chips">
+        ${fallbackCombo.map(c => `<button class="chip ${ql.combos.has(c.id)?'combo-sel':''}" style="font-family:monospace" onclick="toggleQL('combos',${c.id})">${esc(c.name||c.num)}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Notes</div>
+      <textarea placeholder="What did you work on?" oninput="ql.notes=this.value">${esc(ql.notes)}</textarea>
+    </div>
+
+    <button class="btn btn-orange btn-full" onclick="saveQuickLog()">Save Session</button>
+  `;
+}
+
+function toggleQL(field, id) {
+  if (ql[field].has(id)) ql[field].delete(id); else ql[field].add(id);
+  renderQuickLog();
+}
+
+function saveQuickLog() {
+  const techs = getTechniques();
+  const combos = getCombos();
+  const selTechNames = [...ql.techniques].map(id => techs.find(t=>t.id===id)?.name).filter(Boolean);
+  const selComboNums = [...ql.combos].map(id => combos.find(c=>c.id===id)?.num).filter(Boolean);
+
+  // Update use counts
+  for (const id of ql.techniques) { const t = techs.find(x=>x.id===id); if(t){t.useCount++;t.lastUsed=new Date().toISOString();} }
+  saveTechniques(techs);
+  for (const id of ql.combos) { const c = combos.find(x=>x.id===id); if(c){c.useCount++;c.lastUsed=new Date().toISOString();} }
+  saveCombos(combos);
+
+  const sessions = getSessions();
+  sessions.unshift({
+    id: Date.now().toString(),
+    type: ql.type, duration: ql.duration, intensity: ql.intensity,
+    techniques: selTechNames, combos: selComboNums,
+    notes: ql.notes, timestamp: new Date().toISOString()
+  });
+  saveSessions(sessions);
+  updateStreak();
+  closeModal('modalQuickLog');
+  showToast('Session Saved!');
+  renderDashboard();
+}
+
+function updateStreak() {
+  const goals = getGoals();
+  const today = new Date().toDateString();
+  if (goals.lastTrainDate !== today) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    if (goals.lastTrainDate === yesterday.toDateString()) {
+      goals.streak++;
+    } else if (goals.lastTrainDate !== today) {
+      goals.streak = 1;
+    }
+    goals.lastTrainDate = today;
+    goals.longestStreak = Math.max(goals.longestStreak, goals.streak);
+    saveGoals(goals);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  VOICE LOG
+// ══════════════════════════════════════════════
+
+function openVoiceLog() {
+  vl = {phase:'quickContext',recording:false,error:null,
+    selType:'Class',selDur:60,selInt:'Moderate',didSpar:false,
+    conversation:[],currentQuestion:'',currentAnswer:'',isLoadingQ:false,
+    sugType:null,sugDur:null,sugInt:null,sugTech:[],sugCombo:[],sugDrills:[],
+    wentWell:null,toImprove:null,followUp:[],
+    selTech:new Set(),selCombo:new Set(),notes:''};
+  renderVoiceLog(); openModal('modalVoiceLog');
+}
+
+function renderVoiceLog() {
+  const el = document.getElementById('modalVoiceLogInner');
+  if (vl.phase==='quickContext') el.innerHTML = renderVLQuickContext();
+  else if (vl.phase==='guidedRecall') { el.innerHTML = renderVLGuidedRecall(); scrollVLChat(); }
+  else if (vl.phase==='assembling') el.innerHTML = renderVLAssembling();
+  else if (vl.phase==='review') el.innerHTML = renderVLReview();
+}
+
+// ── Phase 1: Quick Context ──
+
+function renderVLQuickContext() {
+  const hasKey = !!localStorage.getItem('claude_api_key');
+  return `
+    <div class="row" style="margin-bottom:16px"><h2>Voice Log</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modalVoiceLog')">Cancel</button></div>
+
+    <div class="vl-header">
+      <div class="vl-header-icon">&#129504;</div>
+      <h2 style="margin:0 0 4px">Quick Setup</h2>
+      <p>Tap a few things, then we'll help you remember the rest</p>
+    </div>
+
+    <div class="section"><div class="section-title">What type of session?</div>
+      <div class="type-grid">${SESSION_TYPES.map(t=>`<button class="type-btn ${vl.selType===t.id?'selected':''}" onclick="vl.selType='${t.id}';renderVoiceLog()">
+        <span class="t-icon">${t.icon}</span>${t.id}</button>`).join('')}</div></div>
+
+    <div class="section"><div class="section-title">How long?</div>
+      <div class="dur-row">${[30,45,60,90,120].map(d=>`<button class="dur-btn ${vl.selDur===d?'selected':''}" onclick="vl.selDur=${d};renderVoiceLog()">${d}m</button>`).join('')}</div></div>
+
+    <div class="section"><div class="section-title">Intensity?</div>
+      <div class="int-row">${INTENSITIES.map(i=>{
+        const sel=vl.selInt===i; const cls=sel?(i==='Light'?'sel-light':i==='Moderate'?'sel-mod':'sel-hard'):'';
+        return `<button class="int-btn ${cls}" onclick="vl.selInt=vl.selInt==='${i}'?null:'${i}';renderVoiceLog()">${i}</button>`;
+      }).join('')}</div></div>
+
+    <div class="section"><div class="section-title">Did you spar?</div>
+      <div class="spar-row">
+        <button class="spar-btn ${vl.didSpar?'on':'off'}" onclick="vl.didSpar=true;renderVoiceLog()">Yes</button>
+        <button class="spar-btn ${!vl.didSpar?'on':'off'}" onclick="vl.didSpar=false;renderVoiceLog()">No</button>
+      </div></div>
+
+    ${!hasKey?`<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px" onclick="showApiKeyModal()">&#128273; Add API Key to Continue</button>`:''}
+    <button class="btn btn-orange btn-full" style="margin-top:16px" onclick="startGuidedRecall()" ${!hasKey?'disabled':''}>&#127908; Start Recall</button>
+  `;
+}
+
+// ── Live session detection ──
+let vlLiveLog = { techs:new Set(), combos:new Set(), moments:[], expanded:true };
+
+function scanAnswerForDetections(answer) {
+  if(!answer) return;
+  const lower = answer.toLowerCase();
+  const techs = getTechniques();
+  const combos = getCombos();
+  // Scan for technique names
+  for(const t of techs) {
+    if(lower.includes(t.name.toLowerCase())) vlLiveLog.techs.add(t.name);
+  }
+  // Scan for combo numbers
+  for(const c of combos) {
+    if(lower.includes(c.num.toLowerCase()) || (c.name && lower.includes(c.name.toLowerCase()))) vlLiveLog.combos.add(c.num);
+  }
+  // Extract key moments (short phrases about what happened)
+  const momentKeywords = ['warmup','warm up','warmed up','shadow box','bag work','pad work','pads','heavy bag','drills','drill','rounds','sparred','partner','mitt','mitts','coach','cooldown','cool down','stretched'];
+  for(const kw of momentKeywords) {
+    if(lower.includes(kw) && !vlLiveLog.moments.includes(kw)) vlLiveLog.moments.push(kw);
+  }
+}
+
+function renderLiveLog() {
+  const totalItems = vlLiveLog.techs.size + vlLiveLog.combos.size + vlLiveLog.moments.length;
+  if(totalItems===0 && vl.conversation.length===0) return '';
+
+  const body = vlLiveLog.expanded ? `<div class="vl-live-body">
+    ${vlLiveLog.techs.size?`<div class="vl-live-section"><div class="sec-label">Techniques detected</div>
+      <div class="vl-live-items">${[...vlLiveLog.techs].map(t=>`<span class="item">${esc(t)}</span>`).join('')}</div></div>`:''}
+    ${vlLiveLog.combos.size?`<div class="vl-live-section"><div class="sec-label">Combos detected</div>
+      <div class="vl-live-items">${[...vlLiveLog.combos].map(c=>`<span class="item combo">${esc(c)}</span>`).join('')}</div></div>`:''}
+    ${vlLiveLog.moments.length?`<div class="vl-live-section"><div class="sec-label">Session activity</div>
+      <div class="vl-live-items">${vlLiveLog.moments.map(m=>`<span class="item moment">${esc(m)}</span>`).join('')}</div></div>`:''}
+    ${totalItems===0?`<div class="vl-live-empty">Keep talking - detections will appear here</div>`:''}
+  </div>` : '';
+
+  return `<div class="vl-live-log">
+    <div class="vl-live-toggle" onclick="vlLiveLog.expanded=!vlLiveLog.expanded;renderVoiceLog()">
+      <span class="label">&#128203; Session Log</span>
+      <span class="count">${totalItems} detected</span>
+      <span class="arrow ${vlLiveLog.expanded?'open':''}">&#9660;</span>
+    </div>
+    ${body}
+  </div>`;
+}
+
+// ── Phase 2: Guided Recall ──
+
+function startGuidedRecall() {
+  vl.phase='guidedRecall';
+  vl.currentQuestion='Walk me through your session - what did you start with?';
+  vl.conversation=[];
+  vl.currentAnswer='';
+  vlLiveLog = { techs:new Set(), combos:new Set(), moments:[], expanded:true };
+  renderVoiceLog();
+}
+
+function renderVLGuidedRecall() {
+  const answered = vl.conversation.filter(t=>t.answer).length;
+  let chatHTML = '';
+
+  // Context summary
+  const ctx = `${vl.selType} \u2022 ${vl.selDur}min${vl.selInt?' \u2022 '+vl.selInt:''}${vl.didSpar?' \u2022 Sparring':''}`;
+  chatHTML += `<div class="vl-bubble vl-bubble-ctx">${esc(ctx)}</div>`;
+
+  // Past turns
+  for (const turn of vl.conversation) {
+    chatHTML += `<div class="vl-bubble vl-bubble-ai"><div class="ai-icon">&#10024;</div><div>${esc(turn.question)}</div></div>`;
+    if (turn.answer) {
+      chatHTML += `<div class="vl-bubble vl-bubble-user">${esc(turn.answer)}</div>`;
+    } else {
+      chatHTML += `<div class="vl-bubble vl-bubble-skip">Skipped</div>`;
+    }
+  }
+
+  // Current question or loading
+  if (vl.isLoadingQ) {
+    chatHTML += `<div class="vl-bubble vl-bubble-ai"><div class="ai-icon">&#10024;</div><div class="vl-typing"><span></span><span></span><span></span></div></div>`;
+  } else if (vl.currentQuestion) {
+    chatHTML += `<div class="vl-bubble vl-bubble-ai"><div class="ai-icon">&#10024;</div><div>${esc(vl.currentQuestion)}</div></div>`;
+  }
+
+  if (vl.error) {
+    chatHTML += `<div style="color:var(--red);font-size:13px;padding:8px">${esc(vl.error)}</div>`;
+  }
+
+  return `
+    <div style="display:flex;flex-direction:column;height:80dvh;max-height:80dvh;">
+      <div class="vl-progress">
+        <span style="color:var(--text2)">Question ${vl.conversation.length+1}</span>
+        ${answered>=2?`<button class="done-btn" onclick="finishVLRecall()">&#10004; I'm Done</button>`:''}
+      </div>
+      ${renderLiveLog()}
+      <div class="vl-chat" id="vlChat">${chatHTML}</div>
+      ${vl.recording?`<div class="vl-rec-indicator" id="vlRecIndicator">
+        <div class="vl-rec-dot"></div>
+        <span class="rec-label">Recording...</span>
+        <div class="vl-waves"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>`:''}
+      <div class="vl-input-bar" style="flex-direction:column;gap:8px;padding:8px 12px;">
+        <div style="display:flex;align-items:center;gap:10px;width:100%;">
+          <input type="text" id="vlTextInput" placeholder="Type here or tap mic..."
+            style="flex:1;background:var(--card2);border:1px solid var(--card3);border-radius:20px;padding:10px 16px;color:var(--text);font-size:15px;outline:none;"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendVLText()}"
+            ${vl.isLoadingQ?'disabled':''}>
+          <button class="mic-circle ${vl.recording?'rec':'idle'}" id="vlMicBtn"
+            onclick="toggleVLMic()" ${vl.isLoadingQ?'disabled':''}
+            style="width:52px;height:52px;font-size:24px;flex-shrink:0;">
+            ${vl.recording?'&#9632;':'&#127908;'}</button>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="btn btn-ghost btn-sm" onclick="skipVLQuestion()" ${vl.isLoadingQ?'disabled':''}>Skip</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function scrollVLChat() {
+  setTimeout(()=>{ const c=document.getElementById('vlChat'); if(c) c.scrollTop=c.scrollHeight; },50);
+}
+
+let vlAccumulatedText = '';
+
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR(); r.continuous=true; r.interimResults=false; r.lang='en-US';
+  r.onresult = e => {
+    // Grab new final results and append to accumulated text
+    for(let i=0; i<e.results.length; i++) {
+      if(e.results[i].isFinal) {
+        vlAccumulatedText += e.results[i][0].transcript + ' ';
+      }
+    }
+    vl.currentAnswer = vlAccumulatedText.trim();
+  };
+  r.onerror = e => { if(e.error!=='no-speech'&&e.error!=='aborted'){vl.error='Speech error: '+e.error; vl.recording=false; renderVoiceLog();} };
+  r.onend = () => {
+    // Chrome stops after silence - restart to keep listening
+    if(vl.recording && recognition) { try{recognition.start();}catch(e){} }
+  };
+  return r;
+}
+
+// Tap to start recording, tap again to stop and auto-send
+function toggleVLMic() {
+  if (vl.isLoadingQ) return;
+  if (vl.recording) {
+    // Stop and send
+    stopVLRecording();
+    setTimeout(()=>{
+      const answer = (vl.currentAnswer||'').trim();
+      if (answer) { submitVLAnswer(); }
+      else { renderVoiceLog(); }
+    }, 500);
+  } else {
+    // Start recording
+    if (recognition) { try { recognition.abort(); } catch(e2) {} recognition=null; }
+    recognition = initSpeech();
+    if (!recognition) { vl.error='Speech recognition not available. Use Chrome on Android.'; renderVoiceLog(); return; }
+    vl.error=null; vl.currentAnswer=''; vlAccumulatedText='';
+    try { recognition.start(); vl.recording=true; } catch(e2) { vl.error=e2.message; }
+    renderVoiceLog();
+  }
+}
+
+function stopVLRecording() { if(recognition){try{recognition.stop();}catch(e){}} vl.recording=false; }
+
+function sendVLText() {
+  const input = document.getElementById('vlTextInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  vl.currentAnswer = text;
+  submitVLAnswer();
+}
+
+async function submitVLAnswer() {
+  const answer = (vl.currentAnswer||'').trim();
+  if (!answer) return;
+  stopVLRecording();
+  scanAnswerForDetections(answer);
+  vl.conversation.push({question:vl.currentQuestion, answer});
+  vl.currentAnswer='';
+  await fetchNextVLQuestion();
+}
+
+async function skipVLQuestion() {
+  stopVLRecording();
+  vl.conversation.push({question:vl.currentQuestion, answer:''});
+  vl.currentAnswer='';
+  await fetchNextVLQuestion();
+}
+
+async function finishVLRecall() {
+  const answer = (vl.currentAnswer||'').trim();
+  if (answer) {
+    stopVLRecording();
+    scanAnswerForDetections(answer);
+    vl.conversation.push({question:vl.currentQuestion, answer});
+    vl.currentAnswer='';
+  }
+  await assembleVLSession();
+}
+
+async function fetchNextVLQuestion() {
+  vl.isLoadingQ=true; vl.error=null; renderVoiceLog();
+
+  const apiKey=localStorage.getItem('claude_api_key');
+  const techs=getTechniques(), combos=getCombos();
+
+  let convText = `Session context: ${vl.selType}, ${vl.selDur} min, ${vl.selInt||'unspecified'} intensity`;
+  convText += vl.didSpar ? '. They DID spar.' : '. They did NOT spar - do NOT ask about sparring.';
+  convText += '\n\nConversation so far:';
+  for(const t of vl.conversation) {
+    convText += '\nQ: '+t.question;
+    convText += '\nA: '+(t.answer||'[skipped]');
+  }
+
+  const sysPrompt = `You help a boxer recall what they did in their training session so they can log it. Ask ONE short question at a time about what actually happened - you are just helping them remember, NOT coaching or giving tips.
+IMPORTANT: Respond with ONLY a JSON object: {"question":"Your question","isComplete":false}
+Example questions (pick based on what's not been covered yet):
+- "What did you do for warmup?"
+- "Did you do any pad work or bag work?"
+- "What drills did coach have you do?"
+- "Did you work with a partner on anything?"
+- "Any combos you remember drilling?"
+- "How did sparring go? Any specific rounds stand out?"
+- "Anything else happen in the session?"
+Rules:
+- ONLY ask about what they DID in the session - don't give advice or tips
+- Keep questions casual and short, like a friend asking about their day
+- Focus on helping them walk through the session chronologically (warmup → drills → main work → cooldown)
+- The session context tells you if they sparred or not - NEVER ask about sparring if they said they didn't
+- After 3-5 questions or when they've covered the main parts of the session, set isComplete to true
+- Don't repeat topics already covered
+- Don't ask about things already answered in the session context (type, duration, intensity, sparring)`;
+
+  try {
+    const data = await callClaude(apiKey, {model:'claude-sonnet-4-5-20250929',max_tokens:256,system:sysPrompt,messages:[{role:'user',content:convText}]});
+    const content=data.content?.[0]?.text||'';
+    const cleaned=content.replace(/```json/g,'').replace(/```/g,'').trim();
+    const r=JSON.parse(cleaned);
+
+    vl.isLoadingQ=false;
+    if(r.isComplete) { await assembleVLSession(); return; }
+    vl.currentQuestion=r.question;
+  } catch(e) {
+    vl.isLoadingQ=false;
+    vl.error=e.message;
+    vl.currentQuestion='Anything else you\'d like to add about your session?';
+  }
+  renderVoiceLog();
+}
+
+// ── Phase 3: Assembly ──
+
+function renderVLAssembling() {
+  return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:16px">
+    <div class="spinner"></div><div style="font-size:18px;font-weight:700">Putting it all together...</div>
+    <div style="font-size:14px;color:var(--text2)">AI is assembling your session from the conversation</div></div>`;
+}
+
+async function assembleVLSession() {
+  vl.phase='assembling'; vl.error=null; renderVoiceLog();
+
+  const apiKey=localStorage.getItem('claude_api_key');
+  const techs=getTechniques(), combos=getCombos();
+  const techNames=techs.map(t=>t.name), comboNames=combos.map(c=>c.num);
+
+  let transcript = `Session basics: ${vl.selType} session, ${vl.selDur} minutes, ${vl.selInt||'unspecified'} intensity.`;
+  if(vl.didSpar) transcript += ' Included sparring.';
+  transcript += '\n\nDetailed recall interview:';
+  for(const t of vl.conversation) {
+    transcript += '\nQ: '+t.question;
+    if(t.answer) transcript += '\nA: '+t.answer;
+  }
+
+  const sysPrompt = `You are a combat sports training assistant. Extract structured data from the user's recall interview.
+IMPORTANT: Respond with ONLY a JSON object:
+{"sessionType":"Class"|"Sparring"|"Drilling"|"Bag Work"|"Pad Work"|"Shadow Boxing"|null,
+"duration":null,"intensity":null,
+"techniques":["name1"],"combos":["1-2-3"],
+"drills":[
+  {"name":"Warmup","description":"Jump rope 3 rds, shadow boxing","combos":[]},
+  {"name":"Pad Work","description":"1-2 × 2 reps, 1-2-3 hip rotation × 2 reps. 3 rds","combos":["1-2","1-2-3"]}
+],
+"wentWell":"..." or null,"toImprove":"..." or null,"followUpQuestions":[]}
+Known techniques: ${techNames.join(', ')}
+Known combos: ${comboNames.join(', ')}
+Match against known lists. Use exact names/numbers. Only include what was actually mentioned.
+DRILL RULES:
+- Break the session into chronological drills/phases the user described (warmup, pad work, bag work, sparring, conditioning, cooldown, etc.)
+- Only include phases the user actually mentioned - do NOT fabricate warmup/cooldown
+- Each drill: descriptive name, what was done, which combos were used
+- Use combo number format in combos array (e.g. "1-2-3")
+- CLEAN UP the description - don't copy user's messy text. Rewrite as short combo-focused notes
+- Use terse format: "1 × 2 reps, 1-2 slip × 2 reps, 1-2-7-3-2. 5 min each, swap."
+- Reference combos by number, add reps/rounds/time. No prose or full sentences. Keep it scannable.
+- Pull ALL combos into the combos array using number format - the description is the quick reference, the array is the definitive list`;
+
+  try {
+    const data = await callClaude(apiKey, {model:'claude-sonnet-4-5-20250929',max_tokens:1536,system:sysPrompt,messages:[{role:'user',content:transcript}]});
+    const content=data.content?.[0]?.text||'';
+    const cleaned=content.replace(/```json/g,'').replace(/```/g,'').trim();
+    const a=JSON.parse(cleaned);
+
+    if(a.sessionType) vl.sugType=a.sessionType;
+    if(a.duration){vl.sugDur=a.duration;}
+    if(a.intensity){vl.sugInt=a.intensity;}
+    vl.sugTech=a.techniques||[];
+    for(const n of vl.sugTech){const m=techs.find(t=>t.name.toLowerCase()===n.toLowerCase());if(m)vl.selTech.add(m.name);}
+    vl.sugCombo=a.combos||[];
+    for(const n of vl.sugCombo){const m=combos.find(c=>c.num.toLowerCase()===n.toLowerCase());if(m)vl.selCombo.add(m.num);}
+    vl.sugDrills=a.drills||[];
+    vl.wentWell=a.wentWell||null; vl.toImprove=a.toImprove||null; vl.followUp=a.followUpQuestions||[];
+    let notes=[]; if(vl.wentWell)notes.push('Went well: '+vl.wentWell); if(vl.toImprove)notes.push('To improve: '+vl.toImprove);
+    vl.notes=notes.join('\n');
+    vl.phase='review';
+  } catch(e) { vl.error=e.message; vl.phase='guidedRecall'; }
+  renderVoiceLog();
+}
+
+// ── Drill helpers ──
+
+function drillIconFor(name) {
+  const n = name.toLowerCase();
+  if (n.includes('warmup') || n.includes('warm up')) return '🔥';
+  if (n.includes('shadow')) return '🥋';
+  if (n.includes('pad') || n.includes('mitt')) return '👏';
+  if (n.includes('bag')) return '🦵';
+  if (n.includes('spar')) return '🥊';
+  if (n.includes('drill')) return '🔄';
+  if (n.includes('conditioning') || n.includes('cardio') || n.includes('circuit')) return '⚡';
+  if (n.includes('cool') || n.includes('stretch')) return '🧊';
+  if (n.includes('clinch')) return '🤼';
+  if (n.includes('footwork')) return '👟';
+  if (n.includes('defense')) return '🛡️';
+  return '🥊';
+}
+
+function renderDrillBlock(drill) {
+  const combosHTML = (drill.combos||[]).length
+    ? `<div class="drill-combos">${drill.combos.map(c=>`<span class="drill-combo-tag">${esc(c)}</span>`).join('')}</div>`
+    : '';
+  return `<div class="drill-block">
+    <div class="drill-header">
+      <div class="drill-icon">${drillIconFor(drill.name)}</div>
+      <div class="drill-name">${esc(drill.name)}</div>
+    </div>
+    <div class="drill-desc">${esc(drill.description)}</div>
+    ${combosHTML}
+  </div>`;
+}
+
+// ── Phase 4: Review ──
+
+function renderVLReview() {
+  const techs = getTechniques();
+  const combos = getCombos();
+  const remainTech = techs.filter(t=>!vl.selTech.has(t.name));
+  const remainCombo = combos.filter(c=>!vl.selCombo.has(c.num));
+  const typeObj = SESSION_TYPES.find(t=>t.id===vl.selType)||{icon:'&#129354;'};
+  const intColor = vl.selInt==='Light'?'var(--green)':vl.selInt==='Hard'?'var(--red)':'var(--orange)';
+
+  // Drill blocks
+  const drillsHTML = vl.sugDrills.length
+    ? `<div class="section"><div class="section-title">&#128203; Workout Breakdown</div>${vl.sugDrills.map(d=>renderDrillBlock(d)).join('')}</div>`
+    : '';
+
+  return `
+    <div class="row" style="margin-bottom:16px"><h2>Session Summary</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modalVoiceLog')">Cancel</button></div>
+
+    <!-- Session overview card -->
+    <div style="background:var(--card);border-radius:16px;padding:20px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <span style="font-size:32px">${typeObj.icon}</span>
+        <div>
+          <div style="font-size:18px;font-weight:700">${vl.selType}</div>
+          <div style="font-size:14px;color:var(--text2)">${vl.selDur} min${vl.selInt?' \u2022 <span style="color:'+intColor+'">'+vl.selInt+'</span>':''}</div>
+        </div>
+      </div>
+
+      ${vl.wentWell?`<div class="insight-card green-bg" style="margin-top:8px"><div class="insight-label">What went well</div><div>${esc(vl.wentWell)}</div></div>`:''}
+      ${vl.toImprove?`<div class="insight-card orange-bg"><div class="insight-label">To improve</div><div>${esc(vl.toImprove)}</div></div>`:''}
+    </div>
+
+    ${drillsHTML}
+
+    <!-- Techniques (collapsed) -->
+    <details style="margin-bottom:12px"><summary style="color:var(--orange);font-size:14px;cursor:pointer;font-weight:600">Techniques (${vl.selTech.size})</summary>
+      <div class="chips" style="margin-top:8px">${[...vl.selTech].sort().map(n=>
+        `<button class="chip selected" onclick="vl.selTech.delete('${esc(n)}');renderVoiceLog()">${esc(n)}</button>`).join('')}
+        ${remainTech.map(t=>
+        `<button class="chip" onclick="vl.selTech.add('${esc(t.name)}');renderVoiceLog()">${esc(t.name)}</button>`).join('')}</div></details>
+
+    <!-- Combos (collapsed) -->
+    <details style="margin-bottom:12px"><summary style="color:var(--orange);font-size:14px;cursor:pointer;font-weight:600">Combos (${vl.selCombo.size})</summary>
+      <div class="chips" style="margin-top:8px">${[...vl.selCombo].sort().map(n=>
+        `<button class="chip combo-sel" style="font-family:monospace" onclick="vl.selCombo.delete('${esc(n)}');renderVoiceLog()">${esc(n)}</button>`).join('')}
+        ${remainCombo.map(c=>
+        `<button class="chip" style="font-family:monospace" onclick="vl.selCombo.add('${esc(c.num)}');renderVoiceLog()">${esc(c.name||c.num)}</button>`).join('')}</div></details>
+
+    <div class="section"><div class="section-title">Notes</div>
+      <textarea placeholder="Additional notes..." oninput="vl.notes=this.value">${esc(vl.notes)}</textarea></div>
+
+    <button class="btn btn-green btn-full" onclick="saveVoiceLog()" style="font-size:16px;height:52px">&#10004; Log Workout</button>
+    <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="openVoiceLog()">Start Over</button>
+  `;
+}
+
+function saveVoiceLog() {
+  const techs=getTechniques(), combos=getCombos();
+  for(const n of vl.selTech){const t=techs.find(x=>x.name===n);if(t){t.useCount++;t.lastUsed=new Date().toISOString();}}
+  saveTechniques(techs);
+  for(const n of vl.selCombo){const c=combos.find(x=>x.num===n);if(c){c.useCount++;c.lastUsed=new Date().toISOString();}}
+  saveCombos(combos);
+
+  const sessions=getSessions();
+  sessions.unshift({id:Date.now().toString(),type:vl.selType,duration:vl.selDur,intensity:vl.selInt,
+    techniques:[...vl.selTech],combos:[...vl.selCombo],drills:vl.sugDrills,notes:vl.notes,timestamp:new Date().toISOString()});
+  saveSessions(sessions);
+  updateStreak();
+  closeModal('modalVoiceLog');
+  showToast('Session Saved!');
+  renderDashboard();
+}
+
+// ══════════════════════════════════════════════
+//  SESSIONS LIST
+// ══════════════════════════════════════════════
+
+function renderSessions() {
+  const sessions = getSessions();
+  document.getElementById('page-sessions').innerHTML = `
+    <div class="page-header"><h1>Sessions</h1><div class="subtitle">${sessions.length} total</div></div>
+    <div class="page-content">
+      ${sessions.length ? sessions.map(s=>sessionRowHTML(s)).join('') :
+        `<div class="empty-state"><span class="empty-icon">&#128203;</span><p>No sessions yet</p></div>`}
+    </div>`;
+}
+
+let editSession = null; // holds session being edited
+
+function showSessionDetail(id) {
+  const s = getSessions().find(x=>x.id===id);
+  if(!s) return;
+  editSession = null;
+  renderSessionDetail(s);
+  openModal('modalSessionDetail');
+}
+
+function renderSessionDetail(s) {
+  const t = SESSION_TYPES.find(x=>x.id===s.type)||{icon:'🥊'};
+  document.getElementById('modalSessionDetailInner').innerHTML = `
+    <div class="row" style="margin-bottom:16px">
+      <h2>${t.icon} ${s.type}</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="startEditSession('${s.id}')">Edit</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modalSessionDetail')">Close</button>
+    </div>
+    <div class="card">
+      <div class="row"><span style="color:var(--text2)">Duration</span><div class="spacer"></div><strong>${s.duration} min</strong></div>
+      ${s.intensity?`<div class="row" style="margin-top:8px"><span style="color:var(--text2)">Intensity</span><div class="spacer"></div><strong>${s.intensity}</strong></div>`:''}
+      <div class="row" style="margin-top:8px"><span style="color:var(--text2)">Date</span><div class="spacer"></div><span>${new Date(s.timestamp).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</span></div>
+    </div>
+    ${s.drills?.length?`<div class="section"><div class="section-title">&#128203; Workout Breakdown</div>${s.drills.map(d=>renderDrillBlock(d)).join('')}</div>`:''}
+    ${s.techniques?.length?`<div class="section"><div class="section-title">Techniques</div>
+      <div class="chips">${s.techniques.map(t=>`<span class="chip selected">${esc(t)}</span>`).join('')}</div></div>`:''}
+    ${s.combos?.length?`<div class="section"><div class="section-title">Combos</div>
+      <div class="chips">${s.combos.map(c=>`<span class="chip combo-sel" style="font-family:monospace">${esc(c)}</span>`).join('')}</div></div>`:''}
+    ${s.notes?`<div class="section"><div class="section-title">Notes</div><div class="card">${esc(s.notes).replace(/\n/g,'<br>')}</div></div>`:''}
+    <button class="btn btn-red btn-full btn-sm" style="margin-top:12px" onclick="deleteSession('${s.id}')">Delete Session</button>
+  `;
+}
+
+function startEditSession(id) {
+  const s = getSessions().find(x=>x.id===id);
+  if(!s) return;
+  editSession = JSON.parse(JSON.stringify(s)); // deep copy
+  renderEditSession();
+}
+
+function renderEditSession() {
+  const s = editSession;
+  const intColor = i => i==='Light'?'sel-light':i==='Moderate'?'sel-mod':i==='Hard'?'sel-hard':'';
+
+  let drillsHTML = '';
+  if (s.drills?.length) {
+    drillsHTML = `<div class="section"><div class="section-title">&#128203; Workout Breakdown</div>
+      ${s.drills.map((d,i) => `<div class="drill-block">
+        <div style="margin-bottom:6px">
+          <input type="text" value="${esc(d.name)}" style="font-weight:700;font-size:14px;padding:8px;background:var(--card2);border-radius:8px"
+            onchange="editSession.drills[${i}].name=this.value">
+        </div>
+        <textarea style="font-size:13px;min-height:50px;padding:8px;background:var(--card2);border-radius:8px"
+          onchange="editSession.drills[${i}].description=this.value">${esc(d.description)}</textarea>
+        <div class="drill-combos" style="margin-top:6px">
+          ${(d.combos||[]).map((c,ci)=>`<span class="drill-combo-tag" style="cursor:pointer" onclick="editSession.drills[${i}].combos.splice(${ci},1);renderEditSession()" title="Tap to remove">${esc(c)} ✕</span>`).join('')}
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <input type="text" id="drillAdd${i}" placeholder="e.g. then we did 2-3-2 dip 1-2..."
+            style="flex:1;font-size:13px;padding:8px 12px;background:var(--card2);border-radius:10px"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();parseDrillInput(${i})}">
+          <button class="btn btn-orange btn-sm" style="font-size:12px;padding:0 10px" onclick="parseDrillInput(${i})">Add</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red);margin-top:6px;font-size:12px" onclick="editSession.drills.splice(${i},1);renderEditSession()">Remove drill</button>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  document.getElementById('modalSessionDetailInner').innerHTML = `
+    <div class="row" style="margin-bottom:16px">
+      <h2>Edit Session</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="showSessionDetail('${s.id}')">Cancel</button>
+    </div>
+
+    <div class="section"><div class="section-title">Session Type</div>
+      <div class="type-grid">${SESSION_TYPES.map(t=>`<button class="type-btn ${s.type===t.id?'selected':''}"
+        onclick="editSession.type='${t.id}';renderEditSession()"><span class="t-icon">${t.icon}</span>${t.id}</button>`).join('')}</div></div>
+
+    <div class="section"><div class="section-title">Duration</div>
+      <div class="dur-row">${DURATIONS.map(d=>`<button class="dur-btn ${s.duration===d?'selected':''}"
+        onclick="editSession.duration=${d};renderEditSession()">${d}m</button>`).join('')}</div>
+      <div class="stepper">Custom: <button class="stepper-btn" onclick="editSession.duration=Math.max(5,editSession.duration-5);renderEditSession()">-</button>
+        <span>${s.duration} min</span>
+        <button class="stepper-btn" onclick="editSession.duration=Math.min(180,editSession.duration+5);renderEditSession()">+</button></div></div>
+
+    <div class="section"><div class="section-title">Intensity</div>
+      <div class="int-row">${INTENSITIES.map(i=>{
+        const sel=s.intensity===i;
+        return `<button class="int-btn ${sel?intColor(i):''}" onclick="editSession.intensity=editSession.intensity==='${i}'?null:'${i}';renderEditSession()">${i}</button>`;
+      }).join('')}</div></div>
+
+    ${drillsHTML}
+
+    <div class="section"><div class="section-title">Notes</div>
+      <textarea placeholder="Notes..." onchange="editSession.notes=this.value">${esc(s.notes||'')}</textarea></div>
+
+    <button class="btn btn-orange btn-full" style="margin-top:12px" onclick="saveEditSession()">Save Changes</button>
+  `;
+}
+
+function parseDrillInput(drillIndex) {
+  const input = document.getElementById('drillAdd'+drillIndex);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  // Extract combo patterns: sequences of numbers/letters separated by dashes (e.g. 1-2, 1-2-3, 2-3-2, 1-2-7-3-2, 1b-2)
+  const comboPattern = /\b(\d[b]?(?:-\d[b]?){1,})\b/gi;
+  const found = [];
+  let match;
+  while ((match = comboPattern.exec(text)) !== null) {
+    const combo = match[1].trim();
+    if (!found.includes(combo)) found.push(combo);
+  }
+
+  // Also check for standalone single numbers that look like punches in context (e.g. "jabs only" = 1)
+  // Map common names to numbers
+  const nameMap = {
+    'jab':['1'],'jabs':['1'],'cross':['2'],'hook':['3'],'lead hook':['3'],
+    'rear hook':['4'],'lead uppercut':['5'],'rear uppercut':['6'],
+    'body hook':['7'],'left body hook':['7'],'right body hook':['8'],
+    'body jab':['1b'],'body cross':['2b']
+  };
+
+  if (!editSession.drills[drillIndex].combos) editSession.drills[drillIndex].combos = [];
+
+  // Add extracted combos (skip duplicates already on the drill)
+  const existing = new Set(editSession.drills[drillIndex].combos.map(c=>c.toLowerCase()));
+  for (const c of found) {
+    if (!existing.has(c.toLowerCase())) {
+      editSession.drills[drillIndex].combos.push(c);
+      existing.add(c.toLowerCase());
+    }
+  }
+
+  // Append cleaned text to description
+  const desc = editSession.drills[drillIndex].description || '';
+  editSession.drills[drillIndex].description = desc ? desc + '. ' + text : text;
+
+  renderEditSession();
+}
+
+function saveEditSession() {
+  const sessions = getSessions();
+  const idx = sessions.findIndex(s=>s.id===editSession.id);
+  if (idx===-1) return;
+  sessions[idx] = editSession;
+  saveSessions(sessions);
+  editSession = null;
+  showToast('Session updated');
+  showSessionDetail(sessions[idx].id);
+  renderPage(currentTab);
+}
+
+function deleteSession(id) {
+  if(!confirm('Delete this session?')) return;
+  saveSessions(getSessions().filter(s=>s.id!==id));
+  closeModal('modalSessionDetail');
+  showToast('Session deleted');
+  renderPage(currentTab);
+}
+
+// ══════════════════════════════════════════════
+//  TECHNIQUES
+// ══════════════════════════════════════════════
+
+function renderTechniques() {
+  const techs = getTechniques();
+  const filtered = techSearch ? techs.filter(t=>t.name.toLowerCase().includes(techSearch.toLowerCase())) : techs;
+  const grouped = {};
+  for (const c of CATEGORIES) grouped[c]=[];
+  for (const t of filtered) { if(grouped[t.cat]) grouped[t.cat].push(t); }
+
+  let listHTML = '';
+  for (const cat of CATEGORIES) {
+    const items = grouped[cat];
+    if (!items?.length) continue;
+    listHTML += `<div class="tech-cat-header">${CAT_ICONS[cat]||''} ${cat} (${items.length})</div>`;
+    listHTML += items.map(t => `<div class="tech-row" onclick="showTechDetail(${t.id})">
+      <div class="tech-name">${esc(t.name)}</div>
+      ${t.rating?`<div class="tech-stars">${'★'.repeat(t.rating)}${'☆'.repeat(5-t.rating)}</div>`:''}
+      <div class="tech-count">${t.useCount}x</div>
+    </div>`).join('');
+  }
+
+  document.getElementById('page-techniques').innerHTML = `
+    <div class="page-header"><div class="row"><h1>Techniques</h1><div class="spacer"></div>
+      <button class="btn btn-orange btn-sm" onclick="addTechniquePrompt()">+ Add</button></div></div>
+    <div class="page-content">
+      <div class="search-bar"><input type="text" placeholder="Search techniques..." value="${esc(techSearch)}"
+        oninput="techSearch=this.value;renderTechniques()"></div>
+      ${listHTML || '<div class="empty-state">No techniques found</div>'}
+    </div>`;
+}
+
+function showTechDetail(id) {
+  const t = getTechniques().find(x=>x.id===id);
+  if(!t) return;
+  document.getElementById('modalTechDetailInner').innerHTML = `
+    <div class="row" style="margin-bottom:16px"><h2>${esc(t.name)}</h2><div class="spacer"></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modalTechDetail')">Close</button></div>
+    <div class="card">
+      <div class="row"><span style="color:var(--text2)">Category</span><div class="spacer"></div><span>${t.cat}</span></div>
+      <div class="row" style="margin-top:8px"><span style="color:var(--text2)">Used</span><div class="spacer"></div><strong>${t.useCount} times</strong></div>
+      ${t.lastUsed?`<div class="row" style="margin-top:8px"><span style="color:var(--text2)">Last used</span><div class="spacer"></div><span>${formatDate(new Date(t.lastUsed))}</span></div>`:''}
+    </div>
+    <div class="section" style="margin-top:16px"><div class="section-title">Proficiency</div>
+      <div class="chips">${[1,2,3,4,5].map(r=>`<button class="chip ${t.rating===r?'selected':''}" style="font-size:18px"
+        onclick="rateTech(${id},${r})">${'★'.repeat(r)}</button>`).join('')}</div></div>
+    <div class="section"><div class="section-title">Notes</div>
+      <textarea id="techNotes" placeholder="Tips, key points...">${esc(t.notes||'')}</textarea>
+      <button class="btn btn-orange btn-sm" style="margin-top:8px" onclick="saveTechNotes(${id})">Save Notes</button></div>
+  `;
+  openModal('modalTechDetail');
+}
+
+function rateTech(id, rating) {
+  const techs=getTechniques(); const t=techs.find(x=>x.id===id);
+  if(t){t.rating=t.rating===rating?0:rating; saveTechniques(techs); showTechDetail(id);}
+}
+function saveTechNotes(id) {
+  const techs=getTechniques(); const t=techs.find(x=>x.id===id);
+  if(t){t.notes=document.getElementById('techNotes').value; saveTechniques(techs); showToast('Notes saved');}
+}
+
+function addTechniquePrompt() {
+  const name = prompt('Technique name:');
+  if(!name?.trim()) return;
+  const cat = prompt('Category (Punches/Kicks/Elbows/Knees/Clinch/Footwork/Defense/Combinations):', 'Punches');
+  if(!cat?.trim()||!CATEGORIES.includes(cat.trim())) { alert('Invalid category'); return; }
+  const techs=getTechniques();
+  techs.push({id:nextTechId(),name:name.trim(),cat:cat.trim(),useCount:0,lastUsed:null,rating:0,notes:'',keyPoints:[],commonMistakes:''});
+  saveTechniques(techs); renderTechniques(); showToast('Technique added');
+}
+
+// ══════════════════════════════════════════════
+//  COMBOS
+// ══════════════════════════════════════════════
+
+function renderCombos() {
+  const combos = getCombos();
+  const filtered = comboSearch ? combos.filter(c=>(c.num+' '+(c.name||'')).toLowerCase().includes(comboSearch.toLowerCase())) : combos;
+
+  document.getElementById('page-combos').innerHTML = `
+    <div class="page-header"><div class="row"><h1>Combos</h1><div class="spacer"></div>
+      <button class="btn btn-orange btn-sm" onclick="addComboPrompt()">+ Add</button></div>
+      <div class="num-ref" style="margin-top:4px">1=Jab 2=Cross 3=Hook 4=Rear Hook 5=Lead Upper 6=Rear Upper</div></div>
+    <div class="page-content">
+      <div class="search-bar"><input type="text" placeholder="Search combos..." value="${esc(comboSearch)}"
+        oninput="comboSearch=this.value;renderCombos()"></div>
+      ${filtered.map(c => `<div class="card" style="cursor:pointer">
+        <div class="row">
+          <strong style="font-family:monospace;font-size:17px">${esc(c.num)}</strong>
+          <div class="spacer"></div>
+          <span style="font-size:12px;color:var(--text2)">${c.useCount}x</span>
+        </div>
+        ${c.name?`<div style="font-size:13px;color:var(--orange);margin-top:4px">${esc(c.name)}</div>`:''}
+        <div style="font-size:12px;color:var(--text2);margin-top:4px">${comboBreakdown(c.num)}</div>
+        ${c.notes?`<div style="font-size:13px;color:var(--text2);margin-top:6px;font-style:italic">${esc(c.notes)}</div>`:''}
+      </div>`).join('') || '<div class="empty-state">No combos found</div>'}
+    </div>`;
+}
+
+function comboBreakdown(num) {
+  return num.split('-').map(n => NUM_MAP[n] || NUM_MAP[n.toUpperCase()] || n).join(' → ');
+}
+
+function addComboPrompt() {
+  const num = prompt('Combo numbers (e.g. 1-2-3-LK):');
+  if(!num?.trim()) return;
+  const name = prompt('Name (optional):');
+  const combos=getCombos();
+  combos.push({id:nextComboId(),num:num.trim(),name:name?.trim()||null,notes:null,useCount:0,lastUsed:null,isCustom:true});
+  saveCombos(combos); renderCombos(); showToast('Combo added');
+}
+
+// ══════════════════════════════════════════════
+//  ROUND TIMER
+// ══════════════════════════════════════════════
+
+function renderTimer() {
+  const mins = Math.floor(timer.timeLeft/60);
+  const secs = timer.timeLeft%60;
+  const display = `${mins}:${secs.toString().padStart(2,'0')}`;
+  const color = timer.running ? (timer.isRest ? 'var(--blue)' : 'var(--green)') : 'var(--text)';
+  const label = timer.running ? (timer.isRest ? 'REST' : 'ROUND') : 'READY';
+
+  document.getElementById('page-timer').innerHTML = `
+    <div class="page-header"><h1>Round Timer</h1></div>
+    <div class="page-content">
+      <div class="timer-display">
+        <div class="timer-label" style="color:${timer.isRest?'var(--blue)':'var(--green)'}">${label}</div>
+        <div class="timer-time" style="color:${color}">${display}</div>
+        <div class="timer-round">Round ${timer.currentRound} / ${timer.rounds}</div>
+      </div>
+
+      <div class="timer-controls">
+        ${!timer.running ?
+          `<button class="timer-ctrl-btn" style="background:var(--green);color:#fff" onclick="startTimer()">&#9654;</button>` :
+          `<button class="timer-ctrl-btn" style="background:var(--red);color:#fff" onclick="stopTimer()">&#9724;</button>`
+        }
+        <button class="timer-ctrl-btn" style="background:var(--card);color:var(--text)" onclick="resetTimer()">&#8634;</button>
+      </div>
+
+      <div class="timer-settings">
+        <div class="timer-setting"><label>Rounds</label><div class="val">
+          <button class="stepper-btn" onclick="timer.rounds=Math.max(1,timer.rounds-1);renderTimer()">-</button>
+          <span>${timer.rounds}</span>
+          <button class="stepper-btn" onclick="timer.rounds=Math.min(20,timer.rounds+1);renderTimer()">+</button></div></div>
+        <div class="timer-setting"><label>Round Time</label><div class="val">
+          <button class="stepper-btn" onclick="timer.roundTime=Math.max(30,timer.roundTime-30);renderTimer()">-</button>
+          <span>${Math.floor(timer.roundTime/60)}:${(timer.roundTime%60).toString().padStart(2,'0')}</span>
+          <button class="stepper-btn" onclick="timer.roundTime=Math.min(600,timer.roundTime+30);renderTimer()">+</button></div></div>
+        <div class="timer-setting"><label>Rest Time</label><div class="val">
+          <button class="stepper-btn" onclick="timer.restTime=Math.max(10,timer.restTime-10);renderTimer()">-</button>
+          <span>${timer.restTime}s</span>
+          <button class="stepper-btn" onclick="timer.restTime=Math.min(300,timer.restTime+10);renderTimer()">+</button></div></div>
+      </div>
+    </div>`;
+}
+
+function startTimer() {
+  if (timer.running) return;
+  if (timer.currentRound===0) { timer.currentRound=1; timer.timeLeft=timer.roundTime; timer.isRest=false; }
+  timer.running=true;
+  timer.interval = setInterval(()=>{
+    timer.timeLeft--;
+    if (timer.timeLeft<=0) {
+      if (timer.isRest) {
+        timer.currentRound++;
+        if (timer.currentRound>timer.rounds) { stopTimer(); showToast('Done! Great work!'); return; }
+        timer.isRest=false; timer.timeLeft=timer.roundTime;
+        try{navigator.vibrate?.(200);}catch{}
+      } else {
+        if (timer.currentRound>=timer.rounds) { stopTimer(); showToast('Done! Great work!'); return; }
+        timer.isRest=true; timer.timeLeft=timer.restTime;
+        try{navigator.vibrate?.([200,100,200]);}catch{}
+      }
+    }
+    renderTimer();
+  }, 1000);
+  renderTimer();
+}
+
+function stopTimer() {
+  timer.running=false;
+  clearInterval(timer.interval);
+  timer.interval=null;
+  renderTimer();
+}
+
+function resetTimer() {
+  stopTimer();
+  timer.currentRound=0; timer.timeLeft=0; timer.isRest=false;
+  renderTimer();
+}
+
+// ══════════════════════════════════════════════
+//  API KEY MODAL
+// ══════════════════════════════════════════════
+
+// Direct Anthropic API call (no proxy needed - works on GitHub Pages)
+async function callClaude(apiKey, payload) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!resp.ok) throw new Error('API error (' + resp.status + ')');
+  return await resp.json();
+}
+
+function showApiKeyModal() {
+  document.getElementById('modalApiKeyInner').innerHTML = `
+    <h2>&#128273; Claude API Key</h2>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:16px">Stored locally. Powers Voice Log AI analysis.</p>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." value="${localStorage.getItem('claude_api_key')||''}" autocomplete="off">
+    <a href="https://console.anthropic.com/settings/keys" target="_blank" style="display:block;text-align:center;color:var(--orange);font-size:14px;margin-top:12px;text-decoration:none">Get a key from Anthropic &rarr;</a>
+    <div style="display:flex;gap:12px;margin-top:20px">
+      <button class="btn btn-card" style="flex:1;height:48px" onclick="closeModal('modalApiKey')">Cancel</button>
+      <button class="btn btn-orange" style="flex:1;height:48px" onclick="const k=document.getElementById('apiKeyInput').value.trim();if(k)localStorage.setItem('claude_api_key',k);else localStorage.removeItem('claude_api_key');closeModal('modalApiKey');showToast('API Key saved');">Save</button>
+    </div>`;
+  openModal('modalApiKey');
+}
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if(e.target===bg) bg.classList.remove('show'); });
+});
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+
+db();
+renderDashboard();
+</script>
+</body>
+</html>

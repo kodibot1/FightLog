@@ -15,6 +15,9 @@ struct DefaultCombos {
         ("5-2-3", nil, "Lead uppercut, cross, hook"),
         ("6-3-2", nil, "Rear uppercut, lead hook, cross"),
         ("1-6-3-2", nil, "Jab, rear uppercut, hook, cross"),
+        ("3-6-3", nil, "Lead hook, rear uppercut, lead hook"),
+        ("1-1-2-3", nil, "Double jab, cross, lead hook"),
+        ("2-3-6", nil, "Cross, lead hook, rear uppercut"),
 
         // Body Work
         ("1-2-1b-2", nil, "Jab high, cross high, body jab, cross"),
@@ -27,22 +30,12 @@ struct DefaultCombos {
         ("1-2-3-2-1-2", nil, "Flow combo - great for bag work"),
         ("1-1-2-3-2", nil, "Double jab into three piece"),
 
-        // Muay Thai / Kickboxing Combos
-        ("1-2-LK", nil, "Jab, cross, low kick - Dutch style"),
-        ("1-2-3-LK", nil, "Jab, cross, hook, low kick"),
-        ("1-2-T", nil, "Jab, cross, teep - create distance"),
-        ("LK-2-3", nil, "Low kick to set up punches"),
-        ("1-2-RH", nil, "Jab, cross, roundhouse kick"),
-        ("T-1-2", "Teep Entry", "Teep to close distance, follow with hands"),
-
         // Counter Combinations
         ("2-3-2", "Counter Cross", "Slip and counter with cross, hook, cross"),
-        ("3-2-LK", nil, "Check hook, cross, low kick"),
 
         // Coach Favorites
         ("1-2-3-2-1", nil, "Five count - ends with jab to reset"),
         ("1-2-5-6-3-2", nil, "Uppercuts in the middle, finish with hook cross"),
-        ("1-1-2-LK-2-3", nil, "Long combination with kick in middle")
     ]
 
     static func createDefaultCombos() -> [Combo] {
