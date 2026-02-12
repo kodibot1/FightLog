@@ -106,6 +106,33 @@ struct DashboardView: View {
                     }
                     .padding(.horizontal)
 
+                    // Recovery Link
+                    NavigationLink {
+                        RecoveryView()
+                    } label: {
+                        HStack {
+                            Image(systemName: "figure.cooldown")
+                                .font(.title2)
+                                .foregroundStyle(.mint)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Recovery")
+                                    .font(.subheadline.bold())
+                                    .foregroundStyle(.primary)
+                                Text("Stretches & recovery circuits")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .padding(.horizontal)
+
                     // Recent Sessions
                     if !sessions.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {

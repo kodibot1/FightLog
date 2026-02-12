@@ -59,6 +59,11 @@
 		A10000000000000000000050 /* APIKeySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000050 /* APIKeySheet.swift */; };
 		A10000000000000000000051 /* VoiceLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000051 /* VoiceLogViewModel.swift */; };
 		A10000000000000000000052 /* VoiceLogSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000052 /* VoiceLogSheet.swift */; };
+		A10000000000000000000053 /* RecoveryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000053 /* RecoveryData.swift */; };
+		A10000000000000000000054 /* RecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000054 /* RecoveryView.swift */; };
+		A10000000000000000000055 /* BodyAreaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000055 /* BodyAreaDetailView.swift */; };
+		A10000000000000000000056 /* CircuitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000056 /* CircuitDetailView.swift */; };
+		A10000000000000000000057 /* StretchIllustrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000057 /* StretchIllustrationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +119,11 @@
 		A20000000000000000000050 /* APIKeySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeySheet.swift; sourceTree = "<group>"; };
 		A20000000000000000000051 /* VoiceLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLogViewModel.swift; sourceTree = "<group>"; };
 		A20000000000000000000052 /* VoiceLogSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLogSheet.swift; sourceTree = "<group>"; };
+		A20000000000000000000053 /* RecoveryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryData.swift; sourceTree = "<group>"; };
+		A20000000000000000000054 /* RecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryView.swift; sourceTree = "<group>"; };
+		A20000000000000000000055 /* BodyAreaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyAreaDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000056 /* CircuitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircuitDetailView.swift; sourceTree = "<group>"; };
+		A20000000000000000000057 /* StretchIllustrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchIllustrationView.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* FightLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FightLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -205,6 +215,7 @@
 				A50000000000000000000019 /* People */,
 				A50000000000000000000020 /* Onboarding */,
 				A50000000000000000000021 /* Settings */,
+				A50000000000000000000022 /* Recovery */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -254,6 +265,7 @@
 				A20000000000000000000005 /* DefaultTechniques.swift */,
 				A20000000000000000000023 /* DefaultCombos.swift */,
 				A20000000000000000000040 /* MemoryQuestions.swift */,
+				A20000000000000000000053 /* RecoveryData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -345,6 +357,17 @@
 				A20000000000000000000050 /* APIKeySheet.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		A50000000000000000000022 /* Recovery */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000054 /* RecoveryView.swift */,
+				A20000000000000000000055 /* BodyAreaDetailView.swift */,
+				A20000000000000000000056 /* CircuitDetailView.swift */,
+				A20000000000000000000057 /* StretchIllustrationView.swift */,
+			);
+			path = Recovery;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -467,6 +490,11 @@
 				A10000000000000000000050 /* APIKeySheet.swift in Sources */,
 				A10000000000000000000051 /* VoiceLogViewModel.swift in Sources */,
 				A10000000000000000000052 /* VoiceLogSheet.swift in Sources */,
+				A10000000000000000000053 /* RecoveryData.swift in Sources */,
+				A10000000000000000000054 /* RecoveryView.swift in Sources */,
+				A10000000000000000000055 /* BodyAreaDetailView.swift in Sources */,
+				A10000000000000000000056 /* CircuitDetailView.swift in Sources */,
+				A10000000000000000000057 /* StretchIllustrationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
