@@ -70,6 +70,7 @@ struct CircuitDetailView: View {
             }
             .padding(.vertical)
         }
+        .premiumBackground()
         .navigationTitle(circuit.name)
         .navigationBarTitleDisplayMode(.large)
         .onDisappear {

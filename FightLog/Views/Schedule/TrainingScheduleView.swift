@@ -45,6 +45,7 @@ struct TrainingScheduleView: View {
                 }
                 .padding()
             }
+            .premiumBackground()
             .navigationTitle("Training Schedule")
         }
     }

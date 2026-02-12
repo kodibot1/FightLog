@@ -172,6 +172,7 @@ struct DashboardView: View {
                 }
                 .padding(.vertical)
             }
+            .premiumBackground()
             .navigationTitle(greeting)
             .onAppear {
                 ensureDefaultData()

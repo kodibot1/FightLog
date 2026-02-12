@@ -19,7 +19,23 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground).ignoresSafeArea()
+            // Premium gradient background
+            GeometryReader { geo in
+                ZStack {
+                    Color(uiColor: .systemBackground)
+                    RadialGradient(
+                        colors: [
+                            Color.orange.opacity(0.10),
+                            Color.orange.opacity(0.04),
+                            Color.clear
+                        ],
+                        center: .init(x: 0.5, y: 0.0),
+                        startRadius: 20,
+                        endRadius: geo.size.height * 0.55
+                    )
+                }
+            }
+            .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // Progress dots

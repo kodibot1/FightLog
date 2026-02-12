@@ -64,6 +64,7 @@
 		A10000000000000000000055 /* BodyAreaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000055 /* BodyAreaDetailView.swift */; };
 		A10000000000000000000056 /* CircuitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000056 /* CircuitDetailView.swift */; };
 		A10000000000000000000057 /* StretchIllustrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000057 /* StretchIllustrationView.swift */; };
+		A10000000000000000000058 /* PremiumBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000058 /* PremiumBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		A20000000000000000000055 /* BodyAreaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyAreaDetailView.swift; sourceTree = "<group>"; };
 		A20000000000000000000056 /* CircuitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircuitDetailView.swift; sourceTree = "<group>"; };
 		A20000000000000000000057 /* StretchIllustrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchIllustrationView.swift; sourceTree = "<group>"; };
+		A20000000000000000000058 /* PremiumBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumBackground.swift; sourceTree = "<group>"; };
 		A30000000000000000000001 /* FightLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FightLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -216,6 +218,7 @@
 				A50000000000000000000020 /* Onboarding */,
 				A50000000000000000000021 /* Settings */,
 				A50000000000000000000022 /* Recovery */,
+				A50000000000000000000023 /* Shared */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -370,6 +373,14 @@
 			path = Recovery;
 			sourceTree = "<group>";
 		};
+		A50000000000000000000023 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000058 /* PremiumBackground.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -495,6 +506,7 @@
 				A10000000000000000000055 /* BodyAreaDetailView.swift in Sources */,
 				A10000000000000000000056 /* CircuitDetailView.swift in Sources */,
 				A10000000000000000000057 /* StretchIllustrationView.swift in Sources */,
+				A10000000000000000000058 /* PremiumBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

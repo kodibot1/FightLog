@@ -38,6 +38,7 @@ struct RecoveryView: View {
             }
             .padding(.vertical)
         }
+        .premiumBackground()
         .navigationTitle("Recovery")
         .navigationBarTitleDisplayMode(.large)
     }

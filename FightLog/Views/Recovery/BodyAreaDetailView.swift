@@ -32,6 +32,7 @@ struct BodyAreaDetailView: View {
             }
             .padding(.vertical)
         }
+        .premiumBackground()
         .navigationTitle(bodyArea.rawValue)
         .navigationBarTitleDisplayMode(.large)
     }
