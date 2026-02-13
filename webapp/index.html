@@ -425,6 +425,71 @@ input[type=date] { color-scheme:dark; }
 .intent-card .intent-label { font-size:11px; font-weight:600; color:var(--accent); text-transform:uppercase;
   letter-spacing:0.06em; margin-bottom:4px; }
 .intent-card .intent-text { font-size:14px; color:var(--text); }
+
+/* ── Recovery ── */
+.rec-section { margin-bottom:24px; }
+.rec-section-title { font-size:11px; font-weight:600; color:var(--text2); text-transform:uppercase;
+  letter-spacing:0.06em; margin-bottom:10px; }
+.rec-card { display:flex; align-items:center; gap:14px; padding:14px;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
+  cursor:pointer; transition:all 0.15s ease; }
+.rec-card:active { transform:scale(0.98); opacity:0.8; }
+.rec-icon { width:44px; height:44px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.rec-card-info { flex:1; }
+.rec-card-name { font-weight:600; font-size:15px; }
+.rec-card-sub { font-size:13px; color:var(--text2); margin-top:2px; }
+.rec-card-right { text-align:right; }
+.rec-card-dur { font-size:12px; font-weight:600; }
+.rec-card-arrow { font-size:12px; color:var(--text3); margin-top:2px; }
+
+.rec-detail-header { text-align:center; margin-bottom:20px; }
+.rec-detail-icon { width:80px; height:80px; border-radius:50%; margin:0 auto 12px;
+  display:flex; align-items:center; justify-content:center; font-size:36px; }
+.rec-detail-desc { font-size:14px; color:var(--text2); line-height:1.5; padding:0 16px; }
+.rec-detail-meta { display:flex; gap:16px; justify-content:center; margin-top:10px; font-size:13px; color:var(--text2); }
+
+.stretch-card { background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px; margin-bottom:10px; }
+.stretch-header { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+.stretch-illus { width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; }
+.stretch-name { font-size:15px; font-weight:600; }
+.stretch-dur { font-size:13px; color:var(--text2); margin-top:2px; }
+.stretch-target { font-size:12px; color:var(--text3); margin-top:2px; }
+.stretch-steps { list-style:none; }
+.stretch-steps li { display:flex; align-items:flex-start; gap:8px; margin-bottom:6px; font-size:13px; color:var(--text2); line-height:1.4; }
+.stretch-step-num { font-weight:700; min-width:18px; text-align:right; flex-shrink:0; }
+
+.circuit-timer-box { background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px; margin-bottom:16px; text-align:center; }
+.circuit-timer-name { font-size:18px; font-weight:700; margin-bottom:4px; }
+.circuit-timer-time { font-size:48px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1; margin:8px 0; }
+.circuit-timer-progress { font-size:13px; color:var(--text2); }
+.circuit-timer-controls { display:flex; gap:20px; justify-content:center; margin-top:12px; }
+.circuit-timer-controls button { width:44px; height:44px; border-radius:50%; border:none; font-size:20px;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s ease; }
+.circuit-timer-controls button:disabled { opacity:0.3; cursor:default; }
+
+.circuit-start-btn { width:100%; height:50px; border-radius:12px; border:none; font-size:16px;
+  font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-bottom:16px; transition:all 0.15s ease; color:#fff; }
+.circuit-start-btn:active { transform:scale(0.97); }
+
+.circuit-ex-row { display:flex; align-items:center; gap:14px; padding:14px;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:8px;
+  transition:all 0.15s ease; }
+.circuit-ex-row.active-ex { border-color:var(--accent-border); }
+.circuit-ex-num { width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+.circuit-ex-info { flex:1; }
+.circuit-ex-name { font-size:14px; font-weight:600; }
+.circuit-ex-target { font-size:12px; color:var(--text2); margin-top:2px; }
+.circuit-ex-dur { font-size:12px; color:var(--text2); }
+
+.rec-back-btn { display:flex; align-items:center; gap:6px; background:none; border:none; color:var(--accent);
+  font-size:14px; font-weight:600; cursor:pointer; padding:0; margin-bottom:12px; }
+.rec-back-btn:active { opacity:0.6; }
 </style>
 </head>
 <body>
@@ -437,6 +502,9 @@ input[type=date] { color-scheme:dark; }
   <button class="tab" onclick="switchTab('sessions')">
     <span class="tab-icon">&#128203;</span>Sessions
   </button>
+  <button class="tab" onclick="switchTab('recovery')">
+    <span class="tab-icon">&#129495;</span>Recovery
+  </button>
   <button class="tab" onclick="switchTab('stats')">
     <span class="tab-icon">&#128200;</span>Stats
   </button>
@@ -445,6 +513,7 @@ input[type=date] { color-scheme:dark; }
 <!-- Pages -->
 <div class="page active" id="page-dashboard"></div>
 <div class="page" id="page-sessions"></div>
+<div class="page" id="page-recovery"></div>
 <div class="page" id="page-stats"></div>
 
 <!-- Modals -->
@@ -852,13 +921,14 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
-  document.querySelectorAll('.tab')[['dashboard','sessions','stats'].indexOf(tab)].classList.add('active');
+  document.querySelectorAll('.tab')[['dashboard','sessions','recovery','stats'].indexOf(tab)].classList.add('active');
   renderPage(tab);
 }
 
 function renderPage(tab) {
   if (tab==='dashboard') renderDashboard();
   else if (tab==='sessions') renderSessions();
+  else if (tab==='recovery') renderRecovery();
   else if (tab==='stats') renderStats();
 }
 
@@ -2153,6 +2223,324 @@ function showChangelog() {
     </div>`).join('')}
     <button class="btn btn-secondary btn-full" onclick="closeModal('modalApiKey')">Close</button>`;
   openModal('modalApiKey');
+}
+
+// ══════════════════════════════════════════════
+//  RECOVERY & STRETCHING
+// ══════════════════════════════════════════════
+
+const BODY_AREAS = [
+  { id:'shoulders', name:'Shoulders', emoji:'💪', color:'#C4956A',
+    pains:'Sore deltoids from extended guard, fatigued rotator cuffs from hooks and uppercuts' },
+  { id:'wrists', name:'Hands & Wrists', emoji:'✋', color:'#5A8AB5',
+    pains:'Sore knuckles and wrist strain from impact, forearm tightness from gripping' },
+  { id:'neck', name:'Neck & Upper Back', emoji:'🧍', color:'#8B6AAF',
+    pains:'Stiff traps from hunched guard, tight neck from head movement and slips' },
+  { id:'lowerback', name:'Lower Back', emoji:'🔄', color:'#B35454',
+    pains:'Tightness from rotation and bending, fatigue from generating power in punches' },
+  { id:'hips', name:'Hips & Legs', emoji:'🦵', color:'#5A9E6F',
+    pains:'Tight hip flexors from stance, sore calves and quads from footwork and bouncing' },
+];
+
+const STRETCHES = {
+  shoulders: [
+    { name:'Cross-Body Shoulder Stretch', duration:'30s each side', target:'Rear deltoid, rotator cuff',
+      steps:['Bring one arm across your chest at shoulder height','Use the opposite hand to gently press above the elbow','Keep shoulders relaxed and down','Hold for 30 seconds, then switch sides'] },
+    { name:'Overhead Tricep Stretch', duration:'30s each side', target:'Triceps, rear deltoid',
+      steps:['Raise one arm overhead and bend the elbow behind your head','Use the opposite hand to gently pull the elbow back','Keep your core engaged and avoid arching your back','Hold for 30 seconds, then switch sides'] },
+    { name:'Chest Expansion', duration:'30s', target:'Chest, front deltoids',
+      steps:['Clasp your hands behind your back','Straighten your arms and lift them slightly','Squeeze shoulder blades together and open your chest','Hold for 30 seconds, breathing deeply'] },
+    { name:'Arm Circles', duration:'30s each direction', target:'Full shoulder girdle',
+      steps:['Extend both arms out to your sides at shoulder height','Make small circles, gradually increasing size','Circle forward for 30 seconds','Reverse direction for 30 seconds'] },
+  ],
+  wrists: [
+    { name:'Wrist Flexor Stretch', duration:'30s each hand', target:'Wrist flexors, inner forearm',
+      steps:['Extend one arm forward, palm facing up','Use the other hand to gently pull fingers down and back','Keep the arm straight','Hold for 30 seconds, then switch hands'] },
+    { name:'Wrist Extensor Stretch', duration:'30s each hand', target:'Wrist extensors, outer forearm',
+      steps:['Extend one arm forward, palm facing down','Use the other hand to gently press fingers toward you','Keep the arm straight','Hold for 30 seconds, then switch hands'] },
+    { name:'Prayer Stretch', duration:'30s', target:'Wrist flexors, forearms',
+      steps:['Press palms together in front of your chest','Slowly lower your hands while keeping palms together','Stop when you feel a stretch in your wrists and forearms','Hold for 30 seconds'] },
+    { name:'Finger Spread & Fist Clench', duration:'10 reps', target:'Finger flexors, hand muscles',
+      steps:['Spread all fingers as wide as possible','Hold the spread for 3 seconds','Clench into a tight fist','Repeat 10 times to restore blood flow'] },
+  ],
+  neck: [
+    { name:'Head Rolls', duration:'30s each direction', target:'Neck muscles, upper traps',
+      steps:['Drop your chin to your chest','Slowly roll your head to one side, then back, then to the other side','Make smooth, controlled circles','Avoid forcing the neck backward — keep it gentle'] },
+    { name:'Upper Trap Stretch', duration:'30s each side', target:'Upper trapezius, levator scapulae',
+      steps:['Tilt your head to one side, ear toward shoulder','Gently place your hand on top of your head for light pressure','Keep the opposite shoulder relaxed and down','Hold for 30 seconds, then switch sides'] },
+    { name:'Chin Tucks', duration:'10 reps', target:'Deep neck flexors, upper back',
+      steps:['Stand or sit with good posture','Pull your chin straight back, making a double chin','Hold for 5 seconds, then release','Repeat 10 times — great for posture correction'] },
+    { name:'Thread the Needle', duration:'30s each side', target:'Thoracic spine, rhomboids',
+      steps:['Start on all fours (tabletop position)','Slide one arm under your body, reaching to the opposite side','Lower your shoulder and temple to the ground','Hold for 30 seconds, then switch sides'] },
+  ],
+  lowerback: [
+    { name:"Child's Pose", duration:'45s', target:'Lower back, lats, hips',
+      steps:['Kneel on the floor and sit back on your heels','Fold forward, reaching arms out in front of you','Let your forehead rest on the ground','Breathe deeply and hold for 45 seconds'] },
+    { name:'Cat-Cow', duration:'10 reps', target:'Entire spine, core',
+      steps:['Start on all fours with a neutral spine','Inhale: Drop belly, lift chest and tailbone (cow)','Exhale: Round spine, tuck chin and pelvis (cat)','Flow slowly between positions for 10 reps'] },
+    { name:'Supine Twist', duration:'30s each side', target:'Lower back, obliques, glutes',
+      steps:['Lie on your back with arms out to the sides','Bend one knee and cross it over your body','Keep both shoulders on the ground','Hold for 30 seconds, then switch sides'] },
+    { name:'Standing Forward Fold', duration:'30s', target:'Hamstrings, lower back',
+      steps:['Stand with feet hip-width apart','Hinge at the hips and fold forward','Let your head and arms hang heavy','Bend knees slightly if needed — hold for 30 seconds'] },
+  ],
+  hips: [
+    { name:'Hip Flexor Lunge Stretch', duration:'30s each side', target:'Hip flexors, quads',
+      steps:['Step into a deep lunge position','Drop your back knee to the ground','Push your hips forward gently','Hold for 30 seconds, then switch legs'] },
+    { name:'Standing Quad Stretch', duration:'30s each side', target:'Quadriceps',
+      steps:['Stand on one leg (use a wall for balance if needed)','Grab your opposite ankle behind you','Pull heel toward your glute, keeping knees together','Hold for 30 seconds, then switch legs'] },
+    { name:'Butterfly Stretch', duration:'45s', target:'Inner thighs, hip adductors',
+      steps:['Sit on the floor with soles of your feet together','Pull your heels toward your body','Gently press your knees toward the ground','Lean forward slightly and hold for 45 seconds'] },
+    { name:'Wall Calf Stretch', duration:'30s each side', target:'Calves, Achilles tendon',
+      steps:['Stand facing a wall, hands on the wall','Step one foot back into a lunge position','Press the back heel into the floor','Hold for 30 seconds, then switch legs'] },
+    { name:'Seated Hamstring Stretch', duration:'30s each side', target:'Hamstrings',
+      steps:['Sit with one leg extended, the other bent inward','Reach forward toward your extended foot','Keep your back straight — hinge from the hips','Hold for 30 seconds, then switch legs'] },
+  ],
+};
+
+const CIRCUITS = [
+  { name:'Full Body Flush', subtitle:'General post-training', emoji:'🧊', color:'#5ABFB5',
+    desc:'A complete cooldown hitting every major area after any training session.', minutes:10,
+    exercises:[
+      {area:'shoulders',idx:0},{area:'wrists',idx:2},{area:'neck',idx:0},{area:'lowerback',idx:1},
+      {area:'hips',idx:0},{area:'lowerback',idx:0},{area:'hips',idx:4},{area:'shoulders',idx:2}
+    ]},
+  { name:'Upper Body Recovery', subtitle:'After heavy bag or pad work', emoji:'🥊', color:'#C4956A',
+    desc:'Targets shoulders, arms, wrists, and upper back — the areas that take the most punishment from bag and pad sessions.', minutes:10,
+    exercises:[
+      {area:'shoulders',idx:0},{area:'shoulders',idx:1},{area:'wrists',idx:0},{area:'wrists',idx:1},
+      {area:'wrists',idx:3},{area:'neck',idx:1},{area:'neck',idx:3},{area:'shoulders',idx:2}
+    ]},
+  { name:'Legs & Core Reset', subtitle:'After footwork or sparring', emoji:'🏃', color:'#5A9E6F',
+    desc:'Loosens up tight hips, legs, and lower back from heavy movement and stance work.', minutes:10,
+    exercises:[
+      {area:'hips',idx:0},{area:'hips',idx:1},{area:'hips',idx:3},{area:'hips',idx:4},
+      {area:'lowerback',idx:1},{area:'lowerback',idx:2},{area:'hips',idx:2},{area:'lowerback',idx:0}
+    ]},
+  { name:'Fight Night Wind-Down', subtitle:'Post-sparring full recovery', emoji:'🌙', color:'#6B5B95',
+    desc:'Deep full-body recovery for after intense sparring. Calms the nervous system and addresses every sore spot.', minutes:10,
+    exercises:[
+      {area:'neck',idx:0},{area:'shoulders',idx:0},{area:'wrists',idx:2},{area:'neck',idx:3},
+      {area:'lowerback',idx:2},{area:'hips',idx:0},{area:'lowerback',idx:3},{area:'lowerback',idx:0}
+    ]},
+];
+
+function resolveCircuitExercises(circuit) {
+  return circuit.exercises.map(ref => STRETCHES[ref.area][ref.idx]);
+}
+
+let recoveryView = 'main'; // 'main' | 'area' | 'circuit'
+let recoveryAreaId = null;
+let recoveryCircuitIdx = null;
+let circuitTimer = { running:false, exIdx:0, timeLeft:0, interval:null };
+
+function renderRecovery() {
+  const el = document.getElementById('page-recovery');
+  if (recoveryView === 'area') { renderBodyAreaDetail(el); return; }
+  if (recoveryView === 'circuit') { renderCircuitDetail(el); return; }
+
+  el.innerHTML = `
+    <div class="page-header"><h1>Recovery</h1><div class="subtitle">Stretching & cooldown</div></div>
+    <div class="page-content">
+      <div class="rec-section">
+        <div class="rec-section-title">Pick Your Pain</div>
+        ${BODY_AREAS.map(a => `
+          <div class="rec-card" onclick="openBodyArea('${a.id}')">
+            <div class="rec-icon" style="background:${a.color}20;color:${a.color}">${a.emoji}</div>
+            <div class="rec-card-info">
+              <div class="rec-card-name">${a.name}</div>
+              <div class="rec-card-sub">${STRETCHES[a.id].length} stretches</div>
+            </div>
+            <div class="rec-card-arrow">›</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="rec-section">
+        <div class="rec-section-title">10-Min Circuits</div>
+        ${CIRCUITS.map((c,i) => `
+          <div class="rec-card" onclick="openCircuit(${i})">
+            <div class="rec-icon" style="background:${c.color}20">${c.emoji}</div>
+            <div class="rec-card-info">
+              <div class="rec-card-name">${c.name}</div>
+              <div class="rec-card-sub">${c.subtitle}</div>
+            </div>
+            <div class="rec-card-right">
+              <div class="rec-card-dur" style="color:${c.color}">${c.minutes} min</div>
+              <div class="rec-card-arrow">›</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+function openBodyArea(areaId) {
+  recoveryView = 'area';
+  recoveryAreaId = areaId;
+  renderRecovery();
+  document.getElementById('page-recovery').scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+function openCircuit(idx) {
+  recoveryView = 'circuit';
+  recoveryCircuitIdx = idx;
+  stopCircuitTimer();
+  renderRecovery();
+  document.getElementById('page-recovery').scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+function backToRecovery() {
+  recoveryView = 'main';
+  recoveryAreaId = null;
+  recoveryCircuitIdx = null;
+  stopCircuitTimer();
+  renderRecovery();
+}
+
+function renderBodyAreaDetail(el) {
+  const area = BODY_AREAS.find(a => a.id === recoveryAreaId);
+  const stretches = STRETCHES[recoveryAreaId];
+  el.innerHTML = `
+    <div class="page-header">
+      <button class="rec-back-btn" onclick="backToRecovery()">‹ Recovery</button>
+      <h1>${area.name}</h1>
+    </div>
+    <div class="page-content">
+      <div class="rec-detail-header">
+        <div class="rec-detail-icon" style="background:${area.color}20">${area.emoji}</div>
+        <div class="rec-detail-desc">${area.pains}</div>
+      </div>
+      ${stretches.map(s => stretchCardHTML(s, area.color)).join('')}
+    </div>`;
+}
+
+function stretchCardHTML(s, color) {
+  return `<div class="stretch-card">
+    <div class="stretch-header">
+      <div class="stretch-illus" style="background:${color}20;color:${color}">🧘</div>
+      <div>
+        <div class="stretch-name">${esc(s.name)}</div>
+        <div class="stretch-dur">⏱ ${esc(s.duration)}</div>
+        <div class="stretch-target">${esc(s.target)}</div>
+      </div>
+    </div>
+    <ol class="stretch-steps">
+      ${s.steps.map((step,i) => `<li><span class="stretch-step-num" style="color:${color}">${i+1}.</span>${esc(step)}</li>`).join('')}
+    </ol>
+  </div>`;
+}
+
+function renderCircuitDetail(el) {
+  const circuit = CIRCUITS[recoveryCircuitIdx];
+  const exercises = resolveCircuitExercises(circuit);
+  const isRunning = circuitTimer.running;
+  const curIdx = circuitTimer.exIdx;
+
+  let timerHTML = '';
+  if (isRunning) {
+    timerHTML = `<div class="circuit-timer-box">
+      <div class="circuit-timer-name">${esc(exercises[curIdx].name)}</div>
+      <div class="circuit-timer-time" style="color:${circuit.color}">${formatCircuitTime(circuitTimer.timeLeft)}</div>
+      <div class="circuit-timer-progress">Exercise ${curIdx+1} of ${exercises.length}</div>
+      <div class="circuit-timer-controls">
+        <button onclick="circuitPrev()" style="background:${circuit.color}20;color:${circuit.color}" ${curIdx===0?'disabled':''}>⏮</button>
+        <button onclick="circuitNext()" style="background:${circuit.color}20;color:${circuit.color}" ${curIdx>=exercises.length-1?'disabled':''}>⏭</button>
+      </div>
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="page-header">
+      <button class="rec-back-btn" onclick="backToRecovery()">‹ Recovery</button>
+      <h1>${esc(circuit.name)}</h1>
+    </div>
+    <div class="page-content">
+      <div class="rec-detail-header">
+        <div class="rec-detail-icon" style="background:${circuit.color}20;font-size:36px">${circuit.emoji}</div>
+        <div class="rec-detail-desc">${esc(circuit.desc)}</div>
+        <div class="rec-detail-meta">
+          <span>⏱ ${circuit.minutes} min</span>
+          <span>📋 ${exercises.length} exercises</span>
+        </div>
+      </div>
+      ${timerHTML}
+      <button class="circuit-start-btn" style="background:${isRunning?'var(--negative)':circuit.color}"
+        onclick="${isRunning?'stopCircuitTimer()':'startCircuitTimer()'}">
+        ${isRunning?'⏹ Stop Circuit':'▶ Start Circuit'}
+      </button>
+      ${exercises.map((ex,i) => `
+        <div class="circuit-ex-row ${isRunning && i===curIdx?'active-ex':''}">
+          <div class="circuit-ex-num" style="background:${isRunning && i===curIdx?circuit.color:'var(--surface3)'};color:${isRunning && i===curIdx?'#fff':'var(--text2)'}">${i+1}</div>
+          <div class="circuit-ex-info">
+            <div class="circuit-ex-name">${esc(ex.name)}</div>
+            <div class="circuit-ex-target">${esc(ex.target)}</div>
+          </div>
+          <div class="circuit-ex-dur">${esc(ex.duration)}</div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+function getExerciseDuration(exercise) {
+  const t = exercise.duration.toLowerCase();
+  if (t.includes('45')) return 45;
+  if (t.includes('each side') || t.includes('each direction') || t.includes('each hand')) return 60;
+  if (t.includes('10 reps')) return 30;
+  return 30;
+}
+
+function formatCircuitTime(secs) {
+  const m = Math.floor(secs/60), s = secs%60;
+  return m+':'+(s<10?'0':'')+s;
+}
+
+function startCircuitTimer() {
+  const exercises = resolveCircuitExercises(CIRCUITS[recoveryCircuitIdx]);
+  circuitTimer.running = true;
+  circuitTimer.exIdx = 0;
+  circuitTimer.timeLeft = getExerciseDuration(exercises[0]);
+  renderRecovery();
+  circuitTimer.interval = setInterval(() => {
+    if (circuitTimer.timeLeft > 0) {
+      circuitTimer.timeLeft--;
+      updateCircuitTimerDisplay();
+    } else {
+      circuitNext();
+    }
+  }, 1000);
+}
+
+function stopCircuitTimer() {
+  clearInterval(circuitTimer.interval);
+  circuitTimer.running = false;
+  circuitTimer.interval = null;
+  if (recoveryView === 'circuit') renderRecovery();
+}
+
+function circuitNext() {
+  const exercises = resolveCircuitExercises(CIRCUITS[recoveryCircuitIdx]);
+  if (circuitTimer.exIdx < exercises.length - 1) {
+    circuitTimer.exIdx++;
+    circuitTimer.timeLeft = getExerciseDuration(exercises[circuitTimer.exIdx]);
+    renderRecovery();
+  } else {
+    stopCircuitTimer();
+  }
+}
+
+function circuitPrev() {
+  const exercises = resolveCircuitExercises(CIRCUITS[recoveryCircuitIdx]);
+  if (circuitTimer.exIdx > 0) {
+    circuitTimer.exIdx--;
+    circuitTimer.timeLeft = getExerciseDuration(exercises[circuitTimer.exIdx]);
+    renderRecovery();
+  }
+}
+
+function updateCircuitTimerDisplay() {
+  const timeEl = document.querySelector('.circuit-timer-time');
+  if (timeEl) timeEl.textContent = formatCircuitTime(circuitTimer.timeLeft);
 }
 
 // ══════════════════════════════════════════════
